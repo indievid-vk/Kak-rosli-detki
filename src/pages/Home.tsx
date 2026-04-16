@@ -67,6 +67,13 @@ export default function Home() {
             <ChildForm onSave={handleSave} onCancel={() => setIsAddOpen(false)} />
           </DialogContent>
         </Dialog>
+        <div className="mt-8 p-4 bg-orange-50/80 rounded-2xl text-sm text-stone-700 text-left max-w-md mx-auto border border-orange-100 shadow-sm">
+          <p className="font-bold mb-2 text-orange-800 text-center">Установка на телефон</p>
+          <ul className="space-y-2 leading-relaxed">
+            <li><span className="font-semibold">🤖 Android:</span> нажмите 3 точки в меню браузера → «Добавить на главный экран» (или подождите — браузер сам предложит установку при следующих визитах).</li>
+            <li><span className="font-semibold">🍎 iOS:</span> в браузере Safari нажмите «Поделиться» (квадрат со стрелкой) → «На экран "Домой"».</li>
+          </ul>
+        </div>
       </header>
 
       <div className="flex-1 overflow-y-auto pb-24">
