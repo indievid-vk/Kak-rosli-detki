@@ -13,10 +13,13 @@ export default defineConfig(({mode}) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
+        injectRegister: 'auto',
+        includeAssets: ['icon.png', 'images/*.png'],
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff}']
         },
         manifest: {
+          id: "/Kak-rosli_detki/",
           name: "Как росли детки - Дневник развития ребенка",
           short_name: "Как росли детки",
           description: "Приложение для отслеживания событий и развития ребенка",
@@ -26,16 +29,19 @@ export default defineConfig(({mode}) => {
           theme_color: "#f97316",
           orientation: "portrait",
           scope: "/Kak-rosli_detki/",
+          lang: "ru",
           icons: [
             {
-              src: "/Kak-rosli_detki/images/icon-192.png",
+              src: "images/icon-192.png",
               sizes: "192x192",
-              type: "image/png"
+              type: "image/png",
+              purpose: "any maskable"
             },
             {
-              src: "/Kak-rosli_detki/images/icon-512.png",
+              src: "images/icon-512.png",
               sizes: "512x512",
-              type: "image/png"
+              type: "image/png",
+              purpose: "any maskable"
             }
           ]
         }
