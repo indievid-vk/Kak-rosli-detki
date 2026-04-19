@@ -6,7 +6,7 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
-    base: '/Kak-rosli_detki/',
+    base: '', // Относительный путь для универсальности
     plugins: [
       react(), 
       tailwindcss()
