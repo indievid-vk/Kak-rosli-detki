@@ -43,6 +43,137 @@ function MediaViewer({ url, type }: { url: string, type: 'media' | 'audio' }) {
   return null;
 }
 
+interface RecordFormProps {
+  editingRecordId: string | null;
+  title: string;
+  setTitle: (val: string) => void;
+  description: string;
+  setDescription: (val: string) => void;
+  word: string;
+  setWord: (val: string) => void;
+  translation: string;
+  setTranslation: (val: string) => void;
+  eventDate: string;
+  setEventDate: (val: string) => void;
+  audioUrl: string;
+  setAudioUrl: (val: string) => void;
+  videoUrl: string;
+  setVideoUrl: (val: string) => void;
+  isSaving: boolean;
+  handleAddEvent: (e: React.FormEvent) => void;
+  cropImageSrc: string | null;
+  setCropImageSrc: (val: string | null) => void;
+  handleCropComplete: (src: string) => void;
+  handleMediaUpload: (e: React.ChangeEvent<HTMLInputElement>, type: 'audio' | 'video') => void;
+}
+
+function RecordForm({
+  editingRecordId, title, setTitle, description, setDescription,
+  word, setWord, translation, setTranslation, eventDate, setEventDate,
+  audioUrl, setAudioUrl, videoUrl, setVideoUrl, isSaving, handleAddEvent,
+  cropImageSrc, setCropImageSrc, handleCropComplete, handleMediaUpload
+}: RecordFormProps) {
+  return (
+    <form onSubmit={handleAddEvent} className="space-y-5 mt-2 overflow-y-auto max-h-[70vh] px-1">
+      {cropImageSrc && (
+        <ImageCropperDialog
+          isOpen={!!cropImageSrc}
+          imageSrc={cropImageSrc}
+          onClose={() => setCropImageSrc(null)}
+          onCropComplete={handleCropComplete}
+          aspectRatio={4/3}
+        />
+      )}
+      <div className="grid gap-2">
+        <Label htmlFor="eventDate" className="text-slate-600 font-bold ml-1">Дата события</Label>
+        <Input id="eventDate" type="date" value={eventDate} onChange={e => setEventDate(e.target.value)} className="rounded-full bg-slate-50 border-slate-200 h-10 px-4 shadow-inner" required />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="title" className="text-slate-600 font-bold ml-1">Событие</Label>
+        <Input id="title" placeholder="Например: Первые шаги" value={title} onChange={e => setTitle(e.target.value)} className="rounded-full bg-slate-50 border-slate-200 h-10 px-4 shadow-inner" />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="description" className="text-slate-600 font-bold ml-1">Подробности</Label>
+        <Input id="description" placeholder="Например: Пошёл, когда мы гостили у бабушки" value={description} onChange={e => setDescription(e.target.value)} className="rounded-full bg-slate-50 border-slate-200 h-10 px-4 shadow-inner" />
+      </div>
+
+      <div className="relative py-2">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-slate-200" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-white px-2 text-red-500 font-bold">Тарабарский словарь</span>
+        </div>
+      </div>
+
+      <div className="grid gap-2">
+        <Label htmlFor="word" className="text-slate-600 font-bold ml-1">Тарабарское слово</Label>
+        <Input id="word" placeholder="Например: Гобалы" value={word} onChange={e => setWord(e.target.value)} className="rounded-full bg-slate-50 border-slate-200 h-10 px-4 shadow-inner" />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="translation" className="text-slate-600 font-bold ml-1">Смысл/Перевод</Label>
+        <Input id="translation" placeholder="Например: Голуби" value={translation} onChange={e => setTranslation(e.target.value)} className="rounded-full bg-slate-50 border-slate-200 h-10 px-4 shadow-inner" />
+      </div>
+      
+      <div className="flex gap-4">
+        <div className="flex-1 relative">
+          <label className="flex flex-col items-center justify-center p-3 bg-blue-50 text-blue-600 rounded-[1.2rem] cursor-pointer hover:bg-blue-100 transition-colors border-2 border-white shadow-sm group min-h-[80px]">
+            <Mic className="h-5 w-5 mb-1 group-hover:scale-110 transition-transform" />
+            <span className="text-[10px] font-bold text-center leading-tight">{audioUrl ? 'Аудио добавлено' : 'Добавить аудио'}</span>
+            <input type="file" accept="audio/*" className="hidden" onChange={(e) => handleMediaUpload(e, 'audio')} />
+          </label>
+          {audioUrl && (
+            <button
+              type="button"
+              onClick={() => setAudioUrl('')}
+              className="absolute -top-1 -right-1 bg-white text-red-500 hover:bg-red-50 border border-slate-200 rounded-full p-1 shadow-sm transition-colors z-10"
+              title="Удалить аудио"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+        
+        <div className="flex-1 relative">
+          <label className="flex flex-col items-center justify-center p-3 bg-orange-50 text-orange-600 rounded-[1.2rem] cursor-pointer hover:bg-orange-100 transition-colors border-2 border-white shadow-sm group min-h-[80px]">
+            <Camera className="h-5 w-5 mb-1 group-hover:scale-110 transition-transform" />
+            <span className="text-[10px] font-bold text-center leading-tight">{videoUrl ? 'Медиа добавлено' : 'Фото/видео'}</span>
+            <input type="file" accept="image/*,video/*" className="hidden" onChange={(e) => handleMediaUpload(e, 'video')} />
+          </label>
+          {videoUrl && (
+            <button
+              type="button"
+              onClick={() => setVideoUrl('')}
+              className="absolute -top-1 -right-1 bg-white text-red-500 hover:bg-red-50 border border-slate-200 rounded-full p-1 shadow-sm transition-colors z-10"
+              title="Удалить медиа"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 sticky bottom-0 bg-white/80 backdrop-blur-sm -mx-1 px-1">
+        <Button 
+          type="button" 
+          variant="outline" 
+          onClick={() => {
+            const closeBtn = document.querySelector('[data-radix-collection-item]') as HTMLElement;
+            if (closeBtn) closeBtn.click();
+          }} 
+          disabled={isSaving} 
+          className="rounded-full h-10 px-5 font-bold text-slate-600 border-slate-200 hover:bg-slate-100 shadow-sm"
+        >
+          Отмена
+        </Button>
+        <Button type="submit" disabled={isSaving} className="rounded-full h-10 px-8 font-bold bg-orange-400 hover:bg-orange-500 text-white shadow-sm transition-all active:scale-95">
+          {isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : (editingRecordId ? 'Обновить' : 'Сохранить')}
+        </Button>
+      </div>
+    </form>
+  );
+}
+
 export default function ChildProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -349,9 +480,9 @@ export default function ChildProfile() {
       calculateAge(child.birthDate, r.date)
     ]);
     const csvContent = [
-      ...profileRows.map(e => e.join(",")),
-      headers.join(","), 
-      ...rows.map(e => e.join(","))
+      ...profileRows.map(e => e.join(";")),
+      headers.join(";"), 
+      ...rows.map(e => e.join(";"))
     ].join("\n");
     const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -383,9 +514,9 @@ export default function ChildProfile() {
       calculateAge(child.birthDate, r.date)
     ]);
     const csvContent = [
-      ...profileRows.map(e => e.join(",")),
-      headers.join(","), 
-      ...rows.map(e => e.join(","))
+      ...profileRows.map(e => e.join(";")),
+      headers.join(";"), 
+      ...rows.map(e => e.join(";"))
     ].join("\n");
     const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -467,12 +598,52 @@ export default function ChildProfile() {
 
       <div className="p-4 sm:p-6 space-y-6 overflow-y-auto flex-1 pb-24 print:overflow-visible print:p-0 print:space-y-0">
         <div className="print:hidden">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <h2 className="text-3xl font-extrabold text-slate-800 tracking-tight">
-              Лента событий
-            </h2>
-            <div className="flex items-center gap-2">
-              <div className="relative">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3">
+              <h2 className="text-3xl font-extrabold text-slate-800 tracking-tight">
+                Лента событий
+              </h2>
+              <Dialog open={isEventOpen} onOpenChange={(open) => {
+                setIsEventOpen(open);
+                if (!open) setEditingRecordId(null);
+              }}>
+                <DialogTrigger 
+                  render={
+                    <Button 
+                      onClick={openAddDialog} 
+                      className="rounded-full bg-orange-400 hover:bg-orange-500 text-white size-8 sm:size-10 shadow-md transition-transform hover:scale-110 active:scale-95 print:hidden p-0 flex items-center justify-center translate-y-0.5"
+                    />
+                  }
+                >
+                  <Plus className="h-5 w-5" />
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px] rounded-[2rem] border-0 shadow-xl bg-white/95 backdrop-blur-md">
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl font-bold text-center mb-2 text-slate-800">
+                      {editingRecordId ? 'Редактирование записи' : 'Новая запись'}
+                    </DialogTitle>
+                  </DialogHeader>
+                  <RecordForm 
+                    editingRecordId={editingRecordId}
+                    title={title} setTitle={setTitle}
+                    description={description} setDescription={setDescription}
+                    word={word} setWord={setWord}
+                    translation={translation} setTranslation={setTranslation}
+                    eventDate={eventDate} setEventDate={setEventDate}
+                    audioUrl={audioUrl} setAudioUrl={setAudioUrl}
+                    videoUrl={videoUrl} setVideoUrl={setVideoUrl}
+                    isSaving={isSaving}
+                    handleAddEvent={handleAddEvent}
+                    cropImageSrc={cropImageSrc} setCropImageSrc={setCropImageSrc}
+                    handleCropComplete={handleCropComplete}
+                    handleMediaUpload={handleMediaUpload}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <div className="relative flex-1 sm:w-auto">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   placeholder="Поиск записей..."
@@ -482,7 +653,7 @@ export default function ChildProfile() {
                 />
               </div>
               <DropdownMenu>
-                <DropdownMenuTrigger render={<Button variant="outline" className="rounded-full border-slate-200 shadow-sm bg-white" />}>
+                <DropdownMenuTrigger render={<Button variant="outline" className="rounded-full border-slate-200 shadow-sm bg-white shrink-0" />}>
                   <Filter className="h-4 w-4 sm:mr-2" />
                   <span className="hidden sm:inline">Фильтр</span>
                 </DropdownMenuTrigger>
@@ -778,97 +949,27 @@ export default function ChildProfile() {
         setIsEventOpen(open);
         if (!open) setEditingRecordId(null);
       }}>
-        <DialogTrigger render={
-          <button onClick={openAddDialog} className="absolute bottom-6 right-6 inline-flex items-center justify-center rounded-full bg-orange-400 hover:bg-orange-500 text-white w-16 h-16 shadow-[0_8px_30px_rgb(251,146,60,0.4)] transition-transform hover:scale-105 active:scale-95 z-20 print:hidden">
-            <Plus className="h-8 w-8" />
-          </button>
-        } />
         <DialogContent className="sm:max-w-[425px] rounded-[2rem] border-0 shadow-xl bg-white/95 backdrop-blur-md">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center mb-2 text-slate-800">
               {editingRecordId ? 'Редактирование записи' : 'Новая запись'}
             </DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleAddEvent} className="space-y-5 mt-2">
-            {cropImageSrc && (
-              <ImageCropperDialog
-                isOpen={!!cropImageSrc}
-                imageSrc={cropImageSrc}
-                onClose={() => setCropImageSrc(null)}
-                onCropComplete={handleCropComplete}
-                aspectRatio={4/3}
-              />
-            )}
-            <div className="grid gap-2">
-              <Label htmlFor="eventDate" className="text-slate-600 font-bold ml-1">Дата события</Label>
-              <Input id="eventDate" type="date" value={eventDate} onChange={e => setEventDate(e.target.value)} className="rounded-full bg-slate-50 border-slate-200 h-12 px-4 shadow-inner" required />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="title" className="text-slate-600 font-bold ml-1">Событие</Label>
-              <Input id="title" placeholder="Например: Первые шаги" value={title} onChange={e => setTitle(e.target.value)} className="rounded-full bg-slate-50 border-slate-200 h-12 px-4 shadow-inner" />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="description" className="text-slate-600 font-bold ml-1">Подробности</Label>
-              <Input id="description" placeholder="Например: Пошёл, когда мы гостили у бабушки" value={description} onChange={e => setDescription(e.target.value)} className="rounded-full bg-slate-50 border-slate-200 h-12 px-4 shadow-inner" />
-            </div>
-
-            <hr className="border-slate-200 my-2" />
-            <h3 className="text-red-500 font-bold text-lg text-center">Тарабарский словарь</h3>
-
-            <div className="grid gap-2">
-              <Label htmlFor="word" className="text-slate-600 font-bold ml-1">Тарабарское слово</Label>
-              <Input id="word" placeholder="Например: Гобалы" value={word} onChange={e => setWord(e.target.value)} className="rounded-full bg-slate-50 border-slate-200 h-12 px-4 shadow-inner" />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="translation" className="text-slate-600 font-bold ml-1">Смысл/Перевод</Label>
-              <Input id="translation" placeholder="Например: Голуби" value={translation} onChange={e => setTranslation(e.target.value)} className="rounded-full bg-slate-50 border-slate-200 h-12 px-4 shadow-inner" />
-            </div>
-            
-            <div className="flex gap-4">
-              <div className="flex-1 relative">
-                <label className="flex flex-col items-center justify-center p-4 bg-blue-50 text-blue-600 rounded-[1.5rem] cursor-pointer hover:bg-blue-100 transition-colors border-2 border-white shadow-sm group h-full">
-                  <Mic className="h-6 w-6 mb-2 group-hover:scale-110 transition-transform" />
-                  <span className="text-xs font-bold text-center">{audioUrl ? 'Аудио добавлено' : 'Добавить аудио'}</span>
-                  <input type="file" accept="audio/*" className="hidden" onChange={(e) => handleMediaUpload(e, 'audio')} />
-                </label>
-                {audioUrl && (
-                  <button
-                    type="button"
-                    onClick={() => setAudioUrl('')}
-                    className="absolute -top-2 -right-2 bg-white text-red-500 hover:bg-red-50 border border-slate-200 rounded-full p-1.5 shadow-sm transition-colors z-10"
-                    title="Удалить аудио"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                )}
-              </div>
-              
-              <div className="flex-1 relative">
-                <label className="flex flex-col items-center justify-center p-4 bg-orange-50 text-orange-600 rounded-[1.5rem] cursor-pointer hover:bg-orange-100 transition-colors border-2 border-white shadow-sm group h-full">
-                  <Camera className="h-6 w-6 mb-2 group-hover:scale-110 transition-transform" />
-                  <span className="text-xs font-bold text-center">{videoUrl ? 'Медиа добавлено' : 'Добавить фото/видео'}</span>
-                  <input type="file" accept="image/*,video/*" className="hidden" onChange={(e) => handleMediaUpload(e, 'video')} />
-                </label>
-                {videoUrl && (
-                  <button
-                    type="button"
-                    onClick={() => setVideoUrl('')}
-                    className="absolute -top-2 -right-2 bg-white text-red-500 hover:bg-red-50 border border-slate-200 rounded-full p-1.5 shadow-sm transition-colors z-10"
-                    title="Удалить медиа"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                )}
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-6">
-              <Button type="button" variant="outline" onClick={() => setIsEventOpen(false)} disabled={isSaving} className="rounded-full h-12 px-6 font-bold text-slate-600 border-slate-200 hover:bg-slate-100 shadow-sm">Отмена</Button>
-              <Button type="submit" disabled={isSaving} className="rounded-full h-12 px-8 font-bold bg-orange-400 hover:bg-orange-500 text-white shadow-sm">
-                {isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Сохранить'}
-              </Button>
-            </div>
-          </form>
+          <RecordForm 
+            editingRecordId={editingRecordId}
+            title={title} setTitle={setTitle}
+            description={description} setDescription={setDescription}
+            word={word} setWord={setWord}
+            translation={translation} setTranslation={setTranslation}
+            eventDate={eventDate} setEventDate={setEventDate}
+            audioUrl={audioUrl} setAudioUrl={setAudioUrl}
+            videoUrl={videoUrl} setVideoUrl={setVideoUrl}
+            isSaving={isSaving}
+            handleAddEvent={handleAddEvent}
+            cropImageSrc={cropImageSrc} setCropImageSrc={setCropImageSrc}
+            handleCropComplete={handleCropComplete}
+            handleMediaUpload={handleMediaUpload}
+          />
         </DialogContent>
       </Dialog>
       <Dialog open={isDictOpen} onOpenChange={setIsDictOpen}>

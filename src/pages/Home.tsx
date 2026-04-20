@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore, Child } from '../store';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,20 @@ export default function Home() {
   const [editingChild, setEditingChild] = useState<Child | null>(null);
   const [childToDelete, setChildToDelete] = useState<string | null>(null);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const [showHint, setShowHint] = useState(false);
+
+  useEffect(() => {
+    // Show hint if there is at least one child and hint hasn't been dismissed
+    if (children.length > 0 && !localStorage.getItem('onboarding_hint_seen')) {
+      setShowHint(true);
+    }
+  }, [children.length]);
+
+  const dismissHint = () => {
+    setShowHint(false);
+    localStorage.setItem('onboarding_hint_seen', 'true');
+  };
 
   const handleSave = async (childData: Omit<Child, 'id'>) => {
     try {
@@ -79,49 +93,71 @@ export default function Home() {
             <p className="text-md mt-2 text-slate-500">Нажмите на кнопку + чтобы добавить</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-3xl lg:max-w-none mx-auto">
             {children.map((child, index) => {
               // Alternate pastel background colors for cards
               const bgColors = ['bg-blue-50/80', 'bg-pink-50/80', 'bg-yellow-50/80', 'bg-orange-50/80'];
               const cardBg = bgColors[index % bgColors.length];
+              const isFirst = index === 0;
               
               return (
-              <Card key={child.id} className={`overflow-hidden border-4 border-white shadow-sm hover:shadow-md transition-all rounded-[2rem] ${cardBg} group`}>
-                <CardContent className="p-0 flex items-center">
-                  <Link to={`/child/${child.id}`} className="flex-1 flex items-center p-5">
-                    <div className="w-20 h-20 rounded-full overflow-hidden bg-white mr-5 flex-shrink-0 border-4 border-white shadow-sm transition-transform group-hover:scale-105">
-                      {child.photoUrl ? (
-                        <img src={child.photoUrl} alt={child.firstName} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-slate-300">
-                          <Camera className="h-8 w-8" />
-                        </div>
-                      )}
+              <div key={child.id} className="relative">
+                <Card className={`overflow-hidden border-2 sm:border-4 border-white shadow-sm hover:shadow-md transition-all rounded-[1.5rem] sm:rounded-[2.5rem] ${cardBg} group`}>
+                  <CardContent className="p-0 flex items-center">
+                    <Link to={`/child/${child.id}`} className="flex-1 flex items-center p-3 sm:p-5">
+                      <div className="w-14 h-14 sm:w-20 h-20 rounded-full overflow-hidden bg-white mr-3 sm:mr-5 flex-shrink-0 border-2 sm:border-4 border-white shadow-sm transition-transform group-hover:scale-105">
+                        {child.photoUrl ? (
+                          <img src={child.photoUrl} alt={child.firstName} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-300">
+                            <Camera className="h-6 w-6 sm:h-8 w-8" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h2 className="text-xl sm:text-2xl font-bold text-slate-800 truncate leading-tight">{child.firstName} {child.lastName}</h2>
+                        <p className="text-slate-500 text-sm sm:text-base font-medium mt-0.5">{new Date(child.birthDate).toLocaleDateString('ru-RU')}</p>
+                      </div>
+                    </Link>
+                    
+                    <div className="flex items-center gap-0.5 sm:gap-1 mr-2 sm:mr-4">
+                      <Dialog open={editingChild?.id === child.id} onOpenChange={(open) => !open && setEditingChild(null)}>
+                        <DialogTrigger className="text-slate-400 hover:text-orange-500 hover:bg-white/60 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-colors" onClick={() => setEditingChild(child)}>
+                          <Edit2 className="h-4 w-4 sm:h-5 w-5" />
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px] rounded-[2rem] border-0 shadow-xl bg-white/95 backdrop-blur-md">
+                          <DialogHeader>
+                            <DialogTitle className="text-2xl font-bold text-center mb-2 text-slate-800">Редактировать</DialogTitle>
+                          </DialogHeader>
+                          <ChildForm initialData={child} onSave={handleSave} onCancel={() => setEditingChild(null)} />
+                        </DialogContent>
+                      </Dialog>
+                      <Button variant="ghost" size="icon" className="text-slate-400 hover:text-red-500 hover:bg-white/60 rounded-full transition-colors w-8 h-8 sm:w-10 sm:h-10" onClick={(e) => handleDeleteChild(e, child.id)}>
+                        <Trash2 className="h-4 w-4 sm:h-5 w-5" />
+                      </Button>
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-slate-800">{child.firstName} {child.lastName}</h2>
-                      <p className="text-slate-600 font-medium mt-1">{new Date(child.birthDate).toLocaleDateString('ru-RU')}</p>
+                  </CardContent>
+                </Card>
+                
+                {showHint && isFirst && (
+                  <div 
+                    className="absolute -bottom-16 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center pointer-events-none animate-bounce"
+                    style={{ animationDuration: '3s' }}
+                  >
+                    <svg width="30" height="30" viewBox="0 0 40 40" className="text-orange-400 mb-1">
+                      <path d="M20 5 C 10 5, 5 15, 20 35" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                      <path d="M15 30 L 20 35 L 25 30" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                    </svg>
+                    <div 
+                      className="bg-orange-500 text-white text-[10px] sm:text-xs font-bold py-1.5 px-3 rounded-full shadow-lg whitespace-nowrap pointer-events-auto cursor-pointer flex items-center gap-2"
+                      onClick={dismissHint}
+                    >
+                      <span>Нажмите для создания ленты событий</span>
+                      <X className="h-3 w-3" />
                     </div>
-                  </Link>
-                  
-                  <div className="flex items-center gap-1 mr-4">
-                    <Dialog open={editingChild?.id === child.id} onOpenChange={(open) => !open && setEditingChild(null)}>
-                      <DialogTrigger className="text-slate-400 hover:text-orange-500 hover:bg-white/60 w-10 h-10 rounded-full flex items-center justify-center transition-colors" onClick={() => setEditingChild(child)}>
-                        <Edit2 className="h-5 w-5" />
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px] rounded-[2rem] border-0 shadow-xl bg-white/95 backdrop-blur-md">
-                        <DialogHeader>
-                          <DialogTitle className="text-2xl font-bold text-center mb-2 text-slate-800">Редактировать</DialogTitle>
-                        </DialogHeader>
-                        <ChildForm initialData={child} onSave={handleSave} onCancel={() => setEditingChild(null)} />
-                      </DialogContent>
-                    </Dialog>
-                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-red-500 hover:bg-white/60 rounded-full transition-colors w-10 h-10" onClick={(e) => handleDeleteChild(e, child.id)}>
-                      <Trash2 className="h-5 w-5" />
-                    </Button>
                   </div>
-                </CardContent>
-              </Card>
+                )}
+              </div>
               );
             })}
           </div>
