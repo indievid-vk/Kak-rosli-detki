@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { useStore, Child } from '../store';
 import { Button } from '@/components/ui/button';
@@ -140,22 +141,58 @@ export default function Home() {
                 </Card>
                 
                 {showHint && isFirst && (
-                  <div 
-                    className="absolute -bottom-16 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center pointer-events-none animate-bounce"
-                    style={{ animationDuration: '3s' }}
-                  >
-                    <svg width="30" height="30" viewBox="0 0 40 40" className="text-orange-400 mb-1">
-                      <path d="M20 5 C 10 5, 5 15, 20 35" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-                      <path d="M15 30 L 20 35 L 25 30" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-                    </svg>
-                    <div 
-                      className="bg-orange-500 text-white text-[10px] sm:text-xs font-bold py-1.5 px-3 rounded-full shadow-lg whitespace-nowrap pointer-events-auto cursor-pointer flex items-center gap-2"
-                      onClick={dismissHint}
+                  <AnimatePresence>
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="absolute -bottom-24 left-0 right-0 z-50 flex flex-col items-center pointer-events-none"
                     >
-                      <span>Нажмите для создания ленты событий</span>
-                      <X className="h-3 w-3" />
-                    </div>
-                  </div>
+                      <div className="relative w-full flex flex-col items-center">
+                        {/* Stylish Curved Arrow */}
+                        <svg 
+                          width="100" 
+                          height="120" 
+                          viewBox="0 0 100 120" 
+                          fill="none" 
+                          className="text-orange-400 drop-shadow-md mb-[-10px] sm:mb-[-5px]"
+                        >
+                          <motion.path 
+                            d="M 50 115 C 80 90 90 40 50 10" 
+                            stroke="currentColor" 
+                            strokeWidth="3.5" 
+                            strokeLinecap="round" 
+                            initial={{ pathLength: 0, opacity: 0 }}
+                            animate={{ pathLength: 1, opacity: 1 }}
+                            transition={{ duration: 1.2, ease: "easeOut", delay: 0.5 }}
+                          />
+                          <motion.path 
+                            d="M 42 22 L 50 10 L 58 22" 
+                            stroke="currentColor" 
+                            strokeWidth="3.5" 
+                            strokeLinecap="round" 
+                            strokeJoin="round"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3, delay: 1.5 }}
+                          />
+                        </svg>
+
+                        <motion.div 
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
+                          className="bg-white border-2 border-orange-200 text-orange-600 text-[11px] sm:text-xs font-bold py-2 px-4 rounded-2xl shadow-xl whitespace-nowrap pointer-events-auto cursor-pointer flex items-center gap-2 group hover:bg-orange-50 transition-colors"
+                          onClick={dismissHint}
+                        >
+                          <span className="sm:hidden">Нажмите на карточку ребенка</span>
+                          <span className="hidden sm:inline">Нажмите на карточку для создания ленты</span>
+                          <div className="bg-orange-100 p-1 rounded-full group-hover:bg-orange-200 transition-colors">
+                            <X className="h-3 w-3" />
+                          </div>
+                        </motion.div>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
                 )}
               </div>
               );
