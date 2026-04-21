@@ -575,7 +575,7 @@ export default function ChildProfile() {
           <Button variant="ghost" size="icon" onClick={() => navigate('/')} className="mr-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full flex-shrink-0">
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <div className="flex-1 flex items-center min-w-0">
+          <div className="flex-1 flex items-center min-w-0 py-2">
             <div className="w-10 h-10 rounded-full overflow-hidden bg-orange-50 mr-3 flex-shrink-0 border-2 border-white shadow-sm">
               {child.photoUrl ? (
                 <img src={child.photoUrl} alt={child.firstName} className="w-full h-full object-cover" />
@@ -585,7 +585,9 @@ export default function ChildProfile() {
                 </div>
               )}
             </div>
-            <h1 className="text-xl font-bold text-slate-800 truncate">{child.firstName}</h1>
+            <h1 className="text-xl font-bold text-slate-800 break-words hyphens-auto" style={{ wordBreak: 'break-word' }}>
+              {[child.firstName, child.lastName, child.middleName].filter(Boolean).join(' ')}
+            </h1>
           </div>
         </div>
         <Button variant="outline" onClick={() => setIsDictOpen(true)} className="sm:ml-auto w-full sm:w-auto rounded-full border-orange-200 text-orange-600 hover:bg-orange-50 flex-shrink-0 shadow-sm">

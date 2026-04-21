@@ -116,7 +116,9 @@ export default function Home() {
                         )}
                       </div>
                       <div className="min-w-0 flex-1 pr-2">
-                        <h2 className="text-xl sm:text-2xl font-bold text-slate-800 leading-tight break-words line-clamp-2">{child.firstName} {child.lastName}</h2>
+                        <h2 className="text-xl sm:text-2xl font-bold text-slate-800 leading-tight break-words hyphens-auto" style={{ wordBreak: 'break-word' }}>
+                          {[child.firstName, child.lastName, child.middleName].filter(Boolean).join(' ')}
+                        </h2>
                         <p className="text-slate-500 text-sm sm:text-base font-medium mt-0.5">{new Date(child.birthDate).toLocaleDateString('ru-RU')}</p>
                       </div>
                     </Link>
