@@ -60,6 +60,7 @@ interface RecordFormProps {
   videoUrl: string;
   setVideoUrl: (val: string) => void;
   isSaving: boolean;
+  onCancel: () => void;
   handleAddEvent: (e: React.FormEvent) => void;
   cropImageSrc: string | null;
   setCropImageSrc: (val: string | null) => void;
@@ -70,7 +71,7 @@ interface RecordFormProps {
 function RecordForm({
   editingRecordId, title, setTitle, description, setDescription,
   word, setWord, translation, setTranslation, eventDate, setEventDate,
-  audioUrl, setAudioUrl, videoUrl, setVideoUrl, isSaving, handleAddEvent,
+  audioUrl, setAudioUrl, videoUrl, setVideoUrl, isSaving, onCancel, handleAddEvent,
   cropImageSrc, setCropImageSrc, handleCropComplete, handleMediaUpload
 }: RecordFormProps) {
   return (
@@ -157,10 +158,7 @@ function RecordForm({
         <Button 
           type="button" 
           variant="outline" 
-          onClick={() => {
-            const closeBtn = document.querySelector('[data-radix-collection-item]') as HTMLElement;
-            if (closeBtn) closeBtn.click();
-          }} 
+          onClick={onCancel} 
           disabled={isSaving} 
           className="rounded-full h-10 px-5 font-bold text-slate-600 border-slate-200 hover:bg-slate-100 shadow-sm"
         >
@@ -633,6 +631,7 @@ export default function ChildProfile() {
                     audioUrl={audioUrl} setAudioUrl={setAudioUrl}
                     videoUrl={videoUrl} setVideoUrl={setVideoUrl}
                     isSaving={isSaving}
+                    onCancel={() => setIsEventOpen(false)}
                     handleAddEvent={handleAddEvent}
                     cropImageSrc={cropImageSrc} setCropImageSrc={setCropImageSrc}
                     handleCropComplete={handleCropComplete}
@@ -945,33 +944,6 @@ export default function ChildProfile() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={isEventOpen} onOpenChange={(open) => {
-        setIsEventOpen(open);
-        if (!open) setEditingRecordId(null);
-      }}>
-        <DialogContent className="sm:max-w-[425px] rounded-[2rem] border-0 shadow-xl bg-white/95 backdrop-blur-md">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-center mb-2 text-slate-800">
-              {editingRecordId ? 'Редактирование записи' : 'Новая запись'}
-            </DialogTitle>
-          </DialogHeader>
-          <RecordForm 
-            editingRecordId={editingRecordId}
-            title={title} setTitle={setTitle}
-            description={description} setDescription={setDescription}
-            word={word} setWord={setWord}
-            translation={translation} setTranslation={setTranslation}
-            eventDate={eventDate} setEventDate={setEventDate}
-            audioUrl={audioUrl} setAudioUrl={setAudioUrl}
-            videoUrl={videoUrl} setVideoUrl={setVideoUrl}
-            isSaving={isSaving}
-            handleAddEvent={handleAddEvent}
-            cropImageSrc={cropImageSrc} setCropImageSrc={setCropImageSrc}
-            handleCropComplete={handleCropComplete}
-            handleMediaUpload={handleMediaUpload}
-          />
-        </DialogContent>
-      </Dialog>
       <Dialog open={isDictOpen} onOpenChange={setIsDictOpen}>
         <DialogContent className="sm:max-w-[600px] rounded-[2rem] border-0 shadow-xl bg-white/95 backdrop-blur-md max-h-[80vh] flex flex-col">
           <DialogHeader>

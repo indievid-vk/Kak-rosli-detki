@@ -148,7 +148,7 @@ export default function Home() {
                       className="absolute -bottom-24 left-0 right-0 z-50 flex flex-col items-center pointer-events-none"
                     >
                       <div className="relative w-full flex flex-col items-center">
-                        {/* Stylish Curved Arrow */}
+                        {/* Stylish Curved Arrow - Single Path */}
                         <svg 
                           width="100" 
                           height="120" 
@@ -157,23 +157,17 @@ export default function Home() {
                           className="text-orange-400 drop-shadow-md mb-[-10px] sm:mb-[-5px]"
                         >
                           <motion.path 
-                            d="M 50 115 C 80 90 90 40 50 10" 
-                            stroke="currentColor" 
-                            strokeWidth="3.5" 
-                            strokeLinecap="round" 
-                            initial={{ pathLength: 0, opacity: 0 }}
-                            animate={{ pathLength: 1, opacity: 1 }}
-                            transition={{ duration: 1.2, ease: "easeOut", delay: 0.5 }}
-                          />
-                          <motion.path 
-                            d="M 42 22 L 50 10 L 58 22" 
+                            d="M 50 115 C 80 90 90 40 50 10 M 42 22 L 50 10 L 58 22" 
                             stroke="currentColor" 
                             strokeWidth="3.5" 
                             strokeLinecap="round" 
                             strokeJoin="round"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.3, delay: 1.5 }}
+                            initial={{ pathLength: 0, opacity: 0 }}
+                            animate={{ pathLength: 1, opacity: 1 }}
+                            transition={{ 
+                              pathLength: { duration: 1.5, ease: "easeInOut" },
+                              opacity: { duration: 0.3 }
+                            }}
                           />
                         </svg>
 
