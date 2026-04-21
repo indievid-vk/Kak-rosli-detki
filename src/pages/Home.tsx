@@ -157,7 +157,7 @@ export default function Home() {
                           className="text-orange-400 drop-shadow-md mb-[-10px] sm:mb-[-5px]"
                         >
                           <motion.path 
-                            d="M 50 115 C 80 90 90 40 50 10 M 42 22 L 50 10 L 58 22" 
+                            d="M 50 115 C 80 90 90 40 50 10 L 42 22 L 50 10 L 58 22" 
                             stroke="currentColor" 
                             strokeWidth="3.5" 
                             strokeLinecap="round" 
