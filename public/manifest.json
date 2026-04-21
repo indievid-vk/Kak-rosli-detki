@@ -21,6 +21,11 @@
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
+    },
+    {
+      "src": "apple-icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
     }
   ]
 }
