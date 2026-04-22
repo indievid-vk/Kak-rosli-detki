@@ -106,7 +106,7 @@ export default function Home() {
                 <Card className={`overflow-hidden border-2 sm:border-4 border-white shadow-sm hover:shadow-md transition-all rounded-[1.5rem] sm:rounded-[2.5rem] ${cardBg} group`}>
                   <CardContent className="p-0 flex items-center min-w-0">
                     <Link to={`/child/${child.id}`} className="flex-1 min-w-0 flex items-center p-3 sm:p-5">
-                      <div className="w-14 h-14 sm:w-20 h-20 rounded-full overflow-hidden bg-white mr-3 sm:mr-5 flex-shrink-0 border-2 sm:border-4 border-white shadow-sm transition-transform group-hover:scale-105">
+                      <div className="w-14 h-20 sm:w-20 sm:h-28 rounded-2xl sm:rounded-[2rem] overflow-hidden bg-white mr-3 sm:mr-5 flex-shrink-0 border-2 sm:border-4 border-white shadow-sm transition-transform group-hover:scale-105">
                         {child.photoUrl ? (
                           <img src={child.photoUrl} alt={child.firstName} className="w-full h-full object-cover" />
                         ) : (
@@ -299,20 +299,20 @@ function ChildForm({ initialData, onSave, onCancel }: { initialData?: Child, onS
           imageSrc={cropImageSrc}
           onClose={() => setCropImageSrc(null)}
           onCropComplete={handleCropComplete}
-          aspectRatio={1}
+          aspectRatio={3/4}
         />
       )}
       <div className="flex flex-col items-center mb-6">
         <div className="relative">
           <label className="cursor-pointer relative group block">
-            <div className="w-28 h-28 rounded-[2rem] overflow-hidden bg-orange-50 border-2 border-dashed border-orange-200 flex items-center justify-center transition-all group-hover:border-orange-400 group-hover:bg-orange-100">
+            <div className="w-24 h-32 rounded-2xl overflow-hidden bg-orange-50 border-2 border-dashed border-orange-200 flex items-center justify-center transition-all group-hover:border-orange-400 group-hover:bg-orange-100">
               {formData.photoUrl ? (
                 <img src={formData.photoUrl} alt="Preview" className="w-full h-full object-cover" />
               ) : (
                 <Camera className="h-10 w-10 text-orange-300" />
               )}
             </div>
-            <div className="absolute inset-0 bg-black/20 rounded-[2rem] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute inset-0 bg-black/20 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
               <Camera className="h-8 w-8 text-white" />
             </div>
             <input type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
