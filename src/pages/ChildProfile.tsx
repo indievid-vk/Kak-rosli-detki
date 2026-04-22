@@ -736,90 +736,90 @@ export default function ChildProfile() {
                   <TableHeader>
                     <TableRow className="hover:bg-transparent">
                       <TableHead 
-                        className={tableLayout === 'fit' ? "w-[15%] sm:w-[12%] font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors" : "whitespace-nowrap font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors"}
+                        className={tableLayout === 'fit' ? "w-[20%] sm:w-[15%] px-1 sm:px-4 text-xs sm:text-sm font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors" : "whitespace-nowrap px-4 text-sm font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors"}
                         onClick={() => handleSort('age')}
                       >
-                        <div className="flex items-center gap-1">
-                          Возраст
+                        <div className="flex items-center gap-0.5 sm:gap-1">
+                          <span>Возраст</span>
                           <ArrowUpDown className="h-3 w-3 opacity-50 flex-shrink-0" />
                         </div>
                       </TableHead>
                       <TableHead 
-                        className={tableLayout === 'fit' ? "w-[25%] sm:w-[30%] font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors" : "whitespace-nowrap font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors"}
+                        className={tableLayout === 'fit' ? "w-[23%] sm:w-[28%] px-1 sm:px-4 text-xs sm:text-sm font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors" : "whitespace-nowrap px-4 text-sm font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors"}
                         onClick={() => handleSort('title')}
                       >
-                        <div className="flex items-center gap-1">
-                          Запись
+                        <div className="flex items-center gap-0.5 sm:gap-1">
+                          <span className="truncate">Запись</span>
                           <ArrowUpDown className="h-3 w-3 opacity-50 flex-shrink-0" />
                         </div>
                       </TableHead>
                       <TableHead 
-                        className={tableLayout === 'fit' ? "w-[25%] sm:w-[33%] font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors" : "whitespace-nowrap font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors"}
+                        className={tableLayout === 'fit' ? "w-[26%] sm:w-[32%] px-1 sm:px-4 text-xs sm:text-sm font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors" : "whitespace-nowrap px-4 text-sm font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors"}
                         onClick={() => handleSort('description')}
                       >
-                        <div className="flex items-center gap-1">
-                          Описание
+                        <div className="flex items-center gap-0.5 sm:gap-1">
+                          <span className="truncate">Описание</span>
                           <ArrowUpDown className="h-3 w-3 opacity-50 flex-shrink-0" />
                         </div>
                       </TableHead>
-                      <TableHead className={tableLayout === 'fit' ? "w-[10%] sm:w-[8%] font-bold text-slate-600 text-center" : "whitespace-nowrap font-bold text-slate-600 text-center"}>
+                      <TableHead className={tableLayout === 'fit' ? "w-[8%] sm:w-[8%] px-0 sm:px-4 text-xs sm:text-sm font-bold text-slate-600 text-center" : "whitespace-nowrap px-4 text-sm font-bold text-slate-600 text-center"}>
                         <span className="hidden sm:inline">Медиа</span>
                         <span className="sm:hidden">📎</span>
                       </TableHead>
                       <TableHead 
-                        className={tableLayout === 'fit' ? "w-[15%] sm:w-[12%] font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors" : "whitespace-nowrap font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors"}
+                        className={tableLayout === 'fit' ? "w-[17%] sm:w-[12%] px-1 sm:px-4 text-xs sm:text-sm font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors" : "whitespace-nowrap px-4 text-sm font-bold text-slate-600 cursor-pointer hover:text-slate-900 transition-colors"}
                         onClick={() => handleSort('date')}
                       >
-                        <div className="flex items-center gap-1">
-                          Дата
+                        <div className="flex items-center gap-0.5 sm:gap-1">
+                          <span>Дата</span>
                           <ArrowUpDown className="h-3 w-3 opacity-50 flex-shrink-0" />
                         </div>
                       </TableHead>
-                      <TableHead className={tableLayout === 'fit' ? "w-[10%] sm:w-[5%]" : "whitespace-nowrap"}></TableHead>
+                      <TableHead className={tableLayout === 'fit' ? "w-[6%] sm:w-[5%] px-0 sm:px-4" : "whitespace-nowrap px-4"}></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {childRecords.map(record => (
                       <TableRow key={record.id} className="cursor-pointer hover:bg-slate-50/50 transition-colors group" onClick={() => setSelectedRecord(record)}>
                         <TableCell 
-                          className="text-slate-600 align-top text-xs sm:text-sm break-words whitespace-normal hover:bg-slate-100/50 transition-colors"
+                          className="px-1 sm:px-4 text-slate-600 align-top text-xs sm:text-sm break-words whitespace-normal hover:bg-slate-100/50 transition-colors"
                           onClick={(e) => {
                             e.stopPropagation();
                             setEditingDateId(record.id);
                           }}
                           title="Нажмите, чтобы изменить дату и возраст"
                         >
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-0.5 sm:gap-1">
                             {calculateAge(child.birthDate, record.date)}
                           </div>
                         </TableCell>
-                        <TableCell className={`align-top break-words whitespace-normal ${tableLayout === 'fit' ? 'max-w-[20ch]' : 'max-w-[100ch]'}`}>
-                          {record.title && <div className="font-bold text-slate-800 break-words">{record.title}</div>}
+                        <TableCell className={`px-1 sm:px-4 align-top break-words whitespace-normal py-2 ${tableLayout === 'fit' ? 'max-w-[20ch]' : 'max-w-[100ch]'}`}>
+                          {record.title && <div className="font-bold text-xs sm:text-sm text-slate-800 break-words">{record.title}</div>}
                           {record.word && (
-                            <div className="mt-0.5">
-                              <div className="text-xs text-slate-500">Слово:</div>
-                              <div className="text-sm font-medium text-orange-600 break-words">{record.word}</div>
+                            <div className={record.title ? "mt-1.5" : ""}>
+                              <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400">Слово:</div>
+                              <div className="text-xs sm:text-sm font-bold text-orange-600 break-words">{record.word}</div>
                             </div>
                           )}
                         </TableCell>
-                        <TableCell className={`align-top break-words whitespace-normal ${tableLayout === 'fit' ? 'max-w-[20ch]' : 'max-w-[100ch]'}`}>
-                          {record.description && <div className="text-slate-600 break-words">{record.description}</div>}
+                        <TableCell className={`px-1 sm:px-4 align-top break-words whitespace-normal py-2 ${tableLayout === 'fit' ? 'max-w-[20ch]' : 'max-w-[100ch]'}`}>
+                          {record.description && <div className="text-slate-600 text-xs sm:text-sm break-words">{record.description}</div>}
                           {record.translation && (
-                            <div className="mt-0.5">
-                              <div className="text-xs text-slate-500">Смысл:</div>
-                              <div className="text-sm text-slate-600 break-words">{record.translation}</div>
+                            <div className={record.description ? "mt-1.5" : ""}>
+                              <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400">Смысл:</div>
+                              <div className="text-xs sm:text-sm font-medium text-slate-700 break-words">{record.translation}</div>
                             </div>
                           )}
                         </TableCell>
-                        <TableCell className="text-center align-top">
-                          <div className="flex items-center justify-center gap-1.5">
-                            {record.videoUrl && <Camera className="h-4 w-4 text-orange-400" />}
-                            {record.audioUrl && <Mic className="h-4 w-4 text-blue-400" />}
+                        <TableCell className="px-0 sm:px-4 text-center align-top py-2">
+                          <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5">
+                            {record.videoUrl && <Camera className="h-3 w-3 sm:h-4 sm:w-4 text-orange-400" />}
+                            {record.audioUrl && <Mic className="h-3 w-3 sm:h-4 sm:w-4 text-blue-400" />}
                             {!record.videoUrl && !record.audioUrl && <span className="text-slate-300">-</span>}
                           </div>
                         </TableCell>
                         <TableCell 
-                          className="text-slate-600 align-top text-xs sm:text-sm break-words whitespace-normal hover:bg-slate-100/50 transition-colors"
+                          className="px-1 sm:px-4 align-top py-2 hover:bg-slate-100/50 transition-colors cursor-pointer text-xs sm:text-sm"
                           onClick={(e) => {
                             e.stopPropagation();
                             setEditingDateId(record.id);
@@ -845,15 +845,15 @@ export default function ChildProfile() {
                                   setEditingDateId(null);
                                 }
                               }}
-                              className="h-8 px-2 text-xs w-[130px]"
+                              className="h-8 px-1 text-[10px] sm:text-xs w-full min-w-[90px] sm:min-w-[110px]"
                             />
                           ) : (
-                            <div className="flex items-center gap-1">
+                            <div className="text-slate-700 whitespace-nowrap">
                               {new Date(record.date).toLocaleDateString('ru-RU')}
                             </div>
                           )}
                         </TableCell>
-                        <TableCell className="align-top py-2 px-1">
+                        <TableCell className="align-top py-2 px-0 sm:px-4">
                           <div className="flex flex-col items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                             <Button 
                               variant="ghost" 
@@ -992,38 +992,43 @@ export default function ChildProfile() {
           </DialogHeader>
           <div className="overflow-y-auto flex-1 pr-2 mt-4">
             {dictionaryRecords.length === 0 ? (
-              <p className="text-slate-500 text-center py-8">Словарь пока пуст.</p>
+              <div className="text-center text-slate-400 py-12 flex flex-col items-center">
+                <div className="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center mb-4 shadow-sm">
+                  <BookOpen className="h-10 w-10 text-orange-300" />
+                </div>
+                <p className="text-xl font-bold text-slate-600">Словарь пока пуст</p>
+                <p className="text-md mt-2 text-slate-500">Добавьте первые словечки в ленте событий</p>
+              </div>
             ) : (
               <div className="overflow-x-hidden">
                 <Table className="table-fixed w-full">
                   <TableHeader>
                     <TableRow className="hover:bg-transparent">
-                      <TableHead className="w-[30%] font-bold text-slate-600">Слово</TableHead>
-                      <TableHead className="w-[35%] font-bold text-slate-600">Смысл</TableHead>
-                      <TableHead className="w-[20%] font-bold text-slate-600">Возраст</TableHead>
-                      <TableHead className="w-[15%] font-bold text-slate-600">Дата</TableHead>
+                      <TableHead className="w-[28%] px-1 sm:px-4 text-xs sm:text-sm font-bold text-slate-600"><span className="truncate">Слово</span></TableHead>
+                      <TableHead className="w-[32%] px-1 sm:px-4 text-xs sm:text-sm font-bold text-slate-600"><span className="truncate">Смысл</span></TableHead>
+                      <TableHead className="w-[24%] px-1 sm:px-4 text-xs sm:text-sm font-bold text-slate-600"><span>Возраст</span></TableHead>
+                      <TableHead className="w-[16%] px-1 sm:px-4 text-xs sm:text-sm font-bold text-slate-600"><span>Дата</span></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {dictionaryRecords.map(r => (
                       <TableRow key={r.id} className="group hover:bg-slate-50/50 transition-colors">
-                        <TableCell className="font-bold text-orange-600 align-top max-w-[20ch] break-words whitespace-normal">{r.word}</TableCell>
-                        <TableCell className="text-slate-600 align-top max-w-[20ch] break-words whitespace-normal">{r.translation}</TableCell>
+                        <TableCell className="px-1 sm:px-4 text-xs sm:text-sm font-bold text-orange-600 align-top py-3 max-w-[20ch] break-words whitespace-normal">{r.word}</TableCell>
+                        <TableCell className="px-1 sm:px-4 text-xs sm:text-sm text-slate-600 align-top py-3 max-w-[20ch] break-words whitespace-normal">{r.translation}</TableCell>
                         <TableCell 
-                          className="text-slate-500 truncate align-top text-xs sm:text-sm hover:bg-slate-100/50 transition-colors cursor-pointer"
+                          className="px-1 sm:px-4 text-slate-500 truncate align-top text-xs sm:text-sm hover:bg-slate-100/50 transition-colors cursor-pointer py-3"
                           onClick={(e) => {
                             e.stopPropagation();
                             setEditingDateId(r.id);
                           }}
                           title="Нажмите, чтобы изменить дату и возраст"
                         >
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-0.5 sm:gap-1">
                             {calculateAge(child.birthDate, r.date)}
-                            <Edit2 className="h-3 w-3 opacity-0 group-hover:opacity-100 text-slate-400 flex-shrink-0" />
                           </div>
                         </TableCell>
                         <TableCell 
-                          className="text-slate-500 truncate align-top text-xs sm:text-sm hover:bg-slate-100/50 transition-colors cursor-pointer"
+                          className="px-1 sm:px-4 align-top py-3 hover:bg-slate-100/50 transition-colors cursor-pointer text-xs sm:text-sm"
                           onClick={(e) => {
                             e.stopPropagation();
                             setEditingDateId(r.id);
@@ -1049,12 +1054,11 @@ export default function ChildProfile() {
                                   setEditingDateId(null);
                                 }
                               }}
-                              className="h-8 px-2 text-xs w-[130px] rounded-full border-slate-200"
+                              className="h-8 px-1 text-xs w-full min-w-[90px] sm:min-w-[110px]"
                             />
                           ) : (
-                            <div className="flex items-center gap-1">
+                            <div className="text-slate-700 whitespace-nowrap">
                               {new Date(r.date).toLocaleDateString('ru-RU')}
-                              <Edit2 className="h-3 w-3 opacity-0 group-hover:opacity-100 text-slate-400 flex-shrink-0" />
                             </div>
                           )}
                         </TableCell>
