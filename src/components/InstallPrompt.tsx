@@ -30,14 +30,15 @@ export const InstallPrompt = () => {
 
     // 3. Логика показа
     const hasSeenWelcome = sessionStorage.getItem('hasSeenWelcome');
+    let timer: any;
+    
     if (!hasSeenWelcome) {
       if (isIOSDevice) {
         // На iOS нет нативного промпта, показываем свою инструкцию через 3 секунды
-        const timer = setTimeout(() => {
+        timer = setTimeout(() => {
           setShowWelcomeDialog(true);
           sessionStorage.setItem('hasSeenWelcome', 'true');
         }, 3000);
-        return () => clearTimeout(timer);
       } else {
         // На Android мы не показываем инструкцию с "точками" автоматически совсем!
         // Вместо этого мы полагаемся на нативный промпт и наш нижний баннер (showPrompt).
@@ -63,6 +64,7 @@ export const InstallPrompt = () => {
     });
 
     return () => {
+      if (timer) clearTimeout(timer);
       window.removeEventListener('beforeinstallprompt', handler);
       window.removeEventListener('app-install-ready', checkDeferredPrompt);
     };
