@@ -11,13 +11,13 @@
   "lang": "ru",
   "icons": [
     {
-      "src": "icon-512.png",
+      "src": "icon-512-rounded.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "maskable-icon-512.png",
+      "src": "maskable-icon-512-v2.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
