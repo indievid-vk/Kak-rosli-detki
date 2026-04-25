@@ -16,6 +16,7 @@ import { PrintableFeed } from '../components/PrintableFeed';
 import { toCanvas } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import { ImageCropperDialog } from '../components/ImageCropperDialog';
+import { AboutApp } from '../components/AboutApp';
 import * as XLSX from 'xlsx';
 
 function MediaViewer({ url, type }: { url: string, type: 'media' | 'audio' }) {
@@ -583,9 +584,10 @@ export default function ChildProfile() {
 
   return (
     <div className="flex flex-col h-full bg-[#fdfbf7] print:bg-white">
-      <header className="bg-white/80 backdrop-blur-md p-4 shadow-sm flex flex-col sm:flex-row sm:items-center gap-4 sticky top-0 z-10 border-b border-slate-100 print:hidden">
+      <header className="bg-white/80 backdrop-blur-md p-4 shadow-sm flex flex-col sm:flex-row sm:items-center gap-4 sticky top-0 z-10 border-b border-slate-100 print:hidden relative pr-14 sm:pr-16">
+        <AboutApp className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full w-10 h-10 p-2 flex items-center justify-center flex-shrink-0" />
         <div className="flex items-center w-full sm:w-auto">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/')} className="mr-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full flex-shrink-0">
+          <Button variant="ghost" size="icon" onClick={() => navigate('/')} className="mr-1 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full flex-shrink-0">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex-1 flex items-center min-w-0 py-2">

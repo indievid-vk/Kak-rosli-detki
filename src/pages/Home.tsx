@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Plus, Edit2, Camera, Baby, Trash2, X } from 'lucide-react';
 import { ImageCropperDialog } from '../components/ImageCropperDialog';
+import { AboutApp } from '../components/AboutApp';
 
 export default function Home() {
   const { children, addChild, updateChild, deleteChild } = useStore();
@@ -66,6 +67,7 @@ export default function Home() {
   return (
     <div className="p-6 flex flex-col h-full bg-transparent">
       <header className="mb-10 mt-6 text-center relative">
+        <AboutApp className="absolute -top-4 -right-2 sm:-right-4 text-slate-400 hover:text-slate-600 hover:bg-slate-100/50 rounded-full w-10 h-10 p-2 flex items-center justify-center" />
         <h1 className="text-4xl font-extrabold text-slate-800 mb-3 tracking-tight">Как росли детки</h1>
         <p className="text-slate-600 font-medium max-w-md mx-auto leading-relaxed">
           Сохраняйте интересные и важные моменты жизни деток, ведите их Тарабарский словарь ;)

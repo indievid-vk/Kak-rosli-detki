@@ -159,10 +159,10 @@ export const InstallPrompt = () => {
       )}
 
       {/* 2. ПЛАВАЮЩИЙ ИНДИКАТОР (КАК В "СЛАДКОМ КАЛЬКУЛЯТОРЕ") */}
-      {!showWelcomeDialog && (
+      {!showWelcomeDialog && !showPrompt && (
         <button
           onClick={() => setShowWelcomeDialog(true)}
-          className="fixed top-6 right-6 z-[9000] bg-white text-orange-500 h-10 px-4 rounded-full font-bold shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-stone-100 flex items-center gap-2 hover:bg-orange-50 active:scale-95 transition-all animate-in fade-in slide-in-from-right-4 duration-500 cursor-pointer group"
+          className="fixed bottom-6 right-6 z-[9000] bg-white text-orange-500 h-10 px-4 rounded-full font-bold shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-stone-100 flex items-center gap-2 hover:bg-orange-50 active:scale-95 transition-all animate-in fade-in slide-in-from-bottom-4 duration-500 cursor-pointer group"
         >
           <div className="relative">
             <Download className="w-4 h-4 group-hover:scale-110 transition-transform" />

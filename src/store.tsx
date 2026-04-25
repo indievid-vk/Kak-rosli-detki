@@ -43,6 +43,9 @@ interface StoreContextType {
   addRecord: (record: Omit<EventRecord, 'id'> & { date?: string }) => Promise<void>;
   updateRecord: (id: string, updates: Partial<EventRecord>) => Promise<void>;
   deleteRecord: (id: string) => Promise<void>;
+  refreshData: () => Promise<void>;
+  isAboutOpen: boolean;
+  setIsAboutOpen: (open: boolean) => void;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -50,19 +53,21 @@ const StoreContext = createContext<StoreContextType | undefined>(undefined);
 export function StoreProvider({ children: reactChildren }: { children: ReactNode }) {
   const [children, setChildren] = useState<Child[]>([]);
   const [records, setRecords] = useState<EventRecord[]>([]);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+
+  const refreshData = async () => {
+    try {
+      const loadedChildren = await getChildrenLocally();
+      const loadedRecords = await getRecordsLocally();
+      setChildren(loadedChildren);
+      setRecords(loadedRecords);
+    } catch (error) {
+      console.error("Failed to load data from local storage", error);
+    }
+  };
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const loadedChildren = await getChildrenLocally();
-        const loadedRecords = await getRecordsLocally();
-        setChildren(loadedChildren);
-        setRecords(loadedRecords);
-      } catch (error) {
-        console.error("Failed to load data from local storage", error);
-      }
-    };
-    loadData();
+    refreshData();
   }, []);
 
   const addChild = async (child: Omit<Child, 'id'>) => {
@@ -171,7 +176,7 @@ export function StoreProvider({ children: reactChildren }: { children: ReactNode
 
   return (
     <StoreContext.Provider value={{
-      children, records, addChild, updateChild, deleteChild, addRecord, updateRecord, deleteRecord
+      children, records, addChild, updateChild, deleteChild, addRecord, updateRecord, deleteRecord, refreshData, isAboutOpen, setIsAboutOpen
     }}>
       {reactChildren}
     </StoreContext.Provider>
