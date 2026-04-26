@@ -191,7 +191,7 @@ export default function Home() {
                             stroke="currentColor" 
                             strokeWidth="3.5" 
                             strokeLinecap="round" 
-                            strokeJoin="round"
+                            strokeLinejoin="round"
                             initial={{ pathLength: 0, opacity: 0 }}
                             animate={{ pathLength: 1, opacity: 1 }}
                             transition={{ 
