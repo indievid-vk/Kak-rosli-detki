@@ -9,6 +9,7 @@ import ChildProfile from './pages/ChildProfile';
 import { StoreProvider } from './store';
 import { InstallPrompt } from './components/InstallPrompt';
 import { BackupFooter } from './components/BackupFooter';
+import { WelcomePopup } from './components/WelcomePopup';
 
 function AppContent() {
   return (
@@ -21,6 +22,7 @@ function AppContent() {
           </Routes>
           <InstallPrompt />
           <BackupFooter />
+          <WelcomePopup />
         </main>
       </div>
     </Router>
