@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { Heart, X } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 
@@ -20,7 +20,8 @@ export function WelcomePopup() {
         <div className="relative p-8 flex flex-col items-center text-center bg-gradient-to-b from-pink-50 to-white">
           <button 
             onClick={() => setIsOpen(false)}
-            className="absolute top-4 right-4 p-2 text-stone-400 hover:text-stone-600 transition-colors"
+            className="absolute top-4 right-4 p-2 text-stone-400 hover:text-stone-600 transition-colors z-10"
+            aria-label="Close"
           >
             <X className="w-5 h-5" />
           </button>
@@ -60,7 +61,7 @@ export function WelcomePopup() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-orange-500 bg-clip-text text-transparent mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-orange-500 bg-clip-text text-transparent mb-2">
               Привет!
             </h2>
             <p className="text-stone-500 text-sm leading-relaxed mb-6 px-2">
