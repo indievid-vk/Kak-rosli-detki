@@ -44,15 +44,15 @@ export function BackupFooter() {
 
   return (
     <>
-      <div className="fixed bottom-6 left-0 right-0 z-[100] px-4 pointer-events-none print:hidden">
+      <div className="fixed bottom-6 left-0 right-0 z-[100] px-3 pointer-events-none print:hidden">
         <motion.div 
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          className="max-w-fit mx-auto"
+          className="mx-auto w-full max-w-lg"
         >
-          <div className="bg-white/90 backdrop-blur-xl border border-white/50 shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-[2.5rem] p-1.5 flex items-center gap-1 sm:gap-2 pointer-events-auto ring-1 ring-black/5">
-            <div className="flex items-center gap-2 pl-3 sm:pl-4 pr-1 sm:pr-2 text-stone-500 py-1.5 sm:py-2">
+          <div className="bg-white/90 backdrop-blur-xl border border-white/50 shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-[2rem] sm:rounded-[2.5rem] p-1.5 flex items-center gap-1 pointer-events-auto ring-1 ring-black/5 overflow-hidden">
+            <div className="flex items-center gap-1.5 pl-2 sm:pl-4 pr-1 text-stone-500 py-1 sm:py-2 flex-shrink-0">
               <div className="relative">
                 <ShieldCheck className="w-5 h-5 text-emerald-500" />
                 <motion.div 
@@ -61,35 +61,35 @@ export function BackupFooter() {
                   className="absolute inset-0 bg-emerald-400 rounded-full blur-[2px]" 
                 />
               </div>
-              <span className="text-[11px] sm:text-[12px] font-extrabold tracking-tight uppercase text-stone-500">Хранилище</span>
+              <span className="hidden xs:inline text-[10px] sm:text-[12px] font-extrabold tracking-tight uppercase text-stone-500">Хранилище</span>
               <button 
                 onClick={() => setShowInfo(true)}
-                className="w-5 h-5 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 hover:bg-stone-200 hover:text-stone-600 transition-colors ml-1"
+                className="w-5 h-5 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 hover:bg-stone-200 hover:text-stone-600 transition-colors ml-0.5"
               >
                 <Info className="w-3 h-3" />
               </button>
             </div>
             
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1 ml-auto flex-1 min-w-0">
               <Button 
                 onClick={handleExport} 
                 disabled={isProcessing}
                 size="sm"
-                className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-[2rem] font-bold h-10 sm:h-11 px-4 sm:px-6 flex items-center gap-2 shadow-lg shadow-emerald-200 transition-all active:scale-95 text-xs sm:text-sm"
+                className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full font-bold h-10 sm:h-11 px-2 sm:px-6 flex items-center justify-center gap-1.5 sm:gap-2 shadow-lg shadow-emerald-200 transition-all active:scale-95 text-[11px] sm:text-sm"
               >
-                <Download className="w-4 h-4" />
-                <span>Сохранить</span>
+                <Download className="w-3.5 h-3.5 sm:w-4 h-4" />
+                <span className="truncate">Сохранить</span>
               </Button>
               
-              <div className="relative group">
+              <div className="relative flex-1 min-w-0">
                 <Button 
                   disabled={isProcessing}
                   variant="outline"
                   size="sm"
-                  className="bg-stone-50/50 border-stone-200 text-stone-600 hover:bg-white hover:border-stone-300 rounded-[2rem] font-bold h-10 sm:h-11 px-4 sm:px-6 flex items-center gap-2 transition-all active:scale-95 text-xs sm:text-sm border-dashed"
+                  className="w-full bg-stone-50/50 border-stone-200 text-stone-600 hover:bg-white hover:border-stone-300 rounded-full font-bold h-10 sm:h-11 px-2 sm:px-6 flex items-center justify-center gap-1.5 sm:gap-2 transition-all active:scale-95 text-[11px] sm:text-sm border-dashed"
                 >
-                  <Upload className="w-4 h-4" />
-                  <span>Загрузить</span>
+                  <Upload className="w-3.5 h-3.5 sm:w-4 h-4" />
+                  <span className="truncate">Загрузить</span>
                   <input 
                     type="file" 
                     accept=".json" 
@@ -104,16 +104,10 @@ export function BackupFooter() {
       </div>
 
       <Dialog open={showInfo} onOpenChange={setShowInfo}>
-        <DialogContent className="sm:max-w-[400px] border-0 bg-white shadow-2xl rounded-[2.5rem] p-0 overflow-hidden">
+        <DialogContent className="sm:max-w-[400px] border-0 bg-white shadow-2xl rounded-[2.5rem] p-0 overflow-hidden pointer-events-auto">
           <div className="bg-emerald-50/50 p-8 pt-10 text-center relative">
-            <button 
-              onClick={() => setShowInfo(false)}
-              className="absolute top-6 right-6 p-2 text-stone-400 hover:bg-white rounded-full transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
             <div className="mx-auto w-16 h-16 rounded-3xl bg-white shadow-sm flex items-center justify-center mb-6">
-              <ShieldCheck className="w-8 h-8 text-emerald-500" />
+              <ShieldCheck className="w-8 h-8 text-emerald-500" strokeWidth={2.5} />
             </div>
             <DialogHeader>
               <DialogTitle className="text-2xl font-bold text-center mb-2 text-stone-800">
@@ -121,35 +115,38 @@ export function BackupFooter() {
               </DialogTitle>
             </DialogHeader>
             <p className="text-stone-500 leading-relaxed font-medium">
-              Ваши моменты хранятся только в браузере. Это безопасно, но данные могут пропасть при очистке кэша.
+              Все записи и фото хранятся <span className="font-bold text-slate-800">только внутри памяти браузера</span>. Это обеспечивает полную приватность.
             </p>
           </div>
           <div className="p-8">
-            <div className="space-y-4">
+            <div className="space-y-5">
+              <p className="text-stone-600 text-[15px] leading-relaxed">
+                Если вы очистите кэш или данные браузера, воспоминания могут исчезнуть навсегда. Поэтому мы создали инструмент безопасности:
+              </p>
               <div className="flex gap-4">
-                <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
-                  <Download className="w-5 h-5 text-orange-500" />
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
+                  <Download className="w-5 h-5 text-emerald-600" strokeWidth={2.5} />
                 </div>
                 <div>
                   <h4 className="font-bold text-stone-800 text-sm">Сохранение</h4>
-                  <p className="text-stone-500 text-xs mt-1">Скачивает файл со всеми записями и фото. Сохраняйте его регулярно!</p>
+                  <p className="text-stone-500 text-xs mt-1">Регулярно скачивайте файл дневничка. Эту копию можно передавать между устройствами.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                  <Upload className="w-5 h-5 text-blue-500" />
+                  <Upload className="w-5 h-5 text-blue-500" strokeWidth={2.5} />
                 </div>
                 <div>
                   <h4 className="font-bold text-stone-800 text-sm">Загрузка</h4>
-                  <p className="text-stone-500 text-xs mt-1">Восстанавливает историю из вашего файла (например, на новом телефоне).</p>
+                  <p className="text-stone-500 text-xs mt-1">Позволяет восстановить историю из вашего файла (например, на новом телефоне).</p>
                 </div>
               </div>
             </div>
             <Button 
               onClick={() => setShowInfo(false)} 
-              className="w-full mt-8 py-6 rounded-2xl font-bold bg-stone-900 hover:bg-stone-800 text-white shadow-xl shadow-stone-200"
+              className="w-full mt-8 py-6 rounded-2xl font-bold bg-stone-900 hover:bg-stone-800 text-white shadow-xl shadow-stone-200 transition-all active:scale-95"
             >
-              Понятно
+              Все понятно
             </Button>
           </div>
         </DialogContent>
