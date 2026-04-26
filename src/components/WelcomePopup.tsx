@@ -5,39 +5,76 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 export function WelcomePopup() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
+  const [mode, setMode] = useState<'welcome' | 'update_available' | 'updated'>('welcome');
 
   useEffect(() => {
-    // Listen for update from pwa-setup.js
+    const hasSeenWelcome = localStorage.getItem('welcome_seen');
+    const justUpdated = localStorage.getItem('pwa_just_updated');
+
+    // Handle post-update message
+    if (justUpdated) {
+      setMode('updated');
+      setIsOpen(true);
+      localStorage.removeItem('pwa_just_updated');
+      return;
+    }
+
+    // Handle first-time welcome
+    if (!hasSeenWelcome) {
+      setMode('welcome');
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+
+    // Listen for PWA update detection
     const handleUpdate = () => {
-      setIsUpdateAvailable(true);
-      setIsOpen(true); // Re-open if update found
+      setMode('update_available');
+      setIsOpen(true);
     };
 
     window.addEventListener('pwa-update-available', handleUpdate);
-
-    // Show initial welcome with a small delay
-    const timer = setTimeout(() => {
-      // If no update found yet, show normal welcome
-      if (!isUpdateAvailable) {
-        setIsOpen(true);
-      }
-    }, 1000);
-
-    return () => {
-      window.removeEventListener('pwa-update-available', handleUpdate);
-      clearTimeout(timer);
-    };
-  }, [isUpdateAvailable]);
+    return () => window.removeEventListener('pwa-update-available', handleUpdate);
+  }, []);
 
   const handleAction = () => {
-    if (isUpdateAvailable) {
-      // Force reload to apply update
+    if (mode === 'update_available') {
+      // Set flag so we know we just updated after reload
+      localStorage.setItem('pwa_just_updated', 'true');
       window.location.reload();
     } else {
+      if (mode === 'welcome') {
+        localStorage.setItem('welcome_seen', 'true');
+      }
       setIsOpen(false);
     }
   };
+
+  const getContent = () => {
+    switch (mode) {
+      case 'updated':
+        return {
+          title: 'Привет!',
+          text: 'Приложение обновилось. Стало ещё удобнее.',
+          button: 'Отлично'
+        };
+      case 'update_available':
+        return {
+          title: 'Обновление!',
+          text: 'Доступна новая версия приложения. Нажмите обновить, чтобы применить изменения.',
+          button: 'Обновить сейчас'
+        };
+      default:
+        return {
+          title: 'Привет!',
+          text: 'Надеемся, что приложение поможет сохранить интересные моменты жизни деток!',
+          button: 'Начать'
+        };
+    }
+  };
+
+  const content = getContent();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -54,18 +91,13 @@ export function WelcomePopup() {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ 
-              type: "spring",
-              stiffness: 260,
-              damping: 20,
-              delay: 0.2
-            }}
+            transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
             className="mb-6 relative"
           >
             <div className="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center">
               <Heart className="w-10 h-10 text-pink-500 fill-pink-500" />
             </div>
-            {isUpdateAvailable && (
+            {mode === 'update_available' && (
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -82,12 +114,10 @@ export function WelcomePopup() {
             transition={{ delay: 0.4 }}
           >
             <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-orange-500 bg-clip-text text-transparent mb-2">
-              {isUpdateAvailable ? 'Обновление!' : 'Привет!'}
+              {content.title}
             </h2>
             <p className="text-stone-500 text-sm leading-relaxed mb-6 px-2">
-              {isUpdateAvailable 
-                ? 'Мы улучшили приложение! Нажмите кнопку ниже, чтобы применить изменения.'
-                : 'Рады видеть вас снова. Пусть каждый момент с вашими детьми будет особенным ❤️'}
+              {content.text}
             </p>
           </motion.div>
 
@@ -95,9 +125,9 @@ export function WelcomePopup() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleAction}
-            className={`w-full py-4 ${isUpdateAvailable ? 'bg-orange-500' : 'bg-orange-400'} hover:opacity-90 text-white rounded-2xl font-bold transition-all shadow-lg shadow-orange-100 flex items-center justify-center gap-2`}
+            className={`w-full py-4 ${mode === 'update_available' ? 'bg-orange-500' : 'bg-orange-400'} hover:opacity-90 text-white rounded-2xl font-bold transition-all shadow-lg shadow-orange-100 flex items-center justify-center gap-2`}
           >
-            {isUpdateAvailable ? 'Обновить сейчас' : 'Начать'}
+            {content.button}
           </motion.button>
         </div>
       </DialogContent>
