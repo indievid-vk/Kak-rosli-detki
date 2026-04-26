@@ -10,6 +10,7 @@ import { StoreProvider } from './store';
 import { InstallPrompt } from './components/InstallPrompt';
 import { BackupFooter } from './components/BackupFooter';
 import { WelcomePopup } from './components/WelcomePopup';
+import { UpdateNotification } from './components/UpdateNotification';
 
 function AppContent() {
   return (
@@ -23,6 +24,7 @@ function AppContent() {
           <InstallPrompt />
           <BackupFooter />
           <WelcomePopup />
+          <UpdateNotification />
         </main>
       </div>
     </Router>

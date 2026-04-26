@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-diary-v112';
+const CACHE_NAME = 'pwa-diary-v113';
 
 const urlsToCache = [
   './',
