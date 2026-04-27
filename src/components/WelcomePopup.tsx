@@ -81,16 +81,8 @@ export function WelcomePopup() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-[320px] p-0 overflow-hidden bg-white border-0 rounded-[2rem] shadow-2xl">
+      <DialogContent showCloseButton={false} className="max-w-[320px] p-0 overflow-hidden bg-white border-0 rounded-[2rem] shadow-2xl">
         <div className="relative p-8 flex flex-col items-center text-center bg-gradient-to-b from-pink-50 to-white">
-          <button 
-            onClick={() => setIsOpen(false)}
-            className="absolute top-4 right-4 p-2 text-stone-400 hover:text-stone-600 transition-colors z-10"
-            aria-label="Close"
-          >
-            <X className="w-5 h-5" />
-          </button>
-
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}

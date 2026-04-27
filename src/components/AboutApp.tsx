@@ -5,6 +5,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ArrowLeft, Shield, Heart, Download, Upload, Plus, Info } from 'lucide-react';
 import { exportData, importData } from '../lib/db';
 
+import { DIALOG_FORM_STYLES, DIALOG_MODAL_STYLES } from '../constants';
+
 export function AboutApp({ className }: { className?: string }) {
   const { refreshData, isAboutOpen, setIsAboutOpen } = useStore();
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -44,7 +46,7 @@ export function AboutApp({ className }: { className?: string }) {
       </Button>
 
       <Dialog open={isAboutOpen} onOpenChange={setIsAboutOpen}>
-        <DialogContent className="w-[calc(100vw-10mm)] h-[calc(100dvh-10mm)] max-w-md sm:max-w-[500px] sm:h-[85vh] max-h-[100dvh] p-0 gap-0 rounded-[1.5rem] sm:rounded-[2rem] bg-white border-none shadow-2xl overflow-hidden flex flex-col pointer-events-auto z-50">
+        <DialogContent showCloseButton={false} className={DIALOG_FORM_STYLES}>
           <div className="flex items-center justify-center p-4 relative bg-white shrink-0 shadow-sm z-10">
              <button onClick={() => setIsAboutOpen(false)} className="absolute left-4 p-2 text-stone-600 hover:bg-stone-100 rounded-full transition-colors">
                <ArrowLeft className="w-6 h-6" />
@@ -135,7 +137,7 @@ export function AboutApp({ className }: { className?: string }) {
       </Dialog>
 
       <Dialog open={!!alertMessage} onOpenChange={(open) => !open && setAlertMessage(null)}>
-        <DialogContent className="sm:max-w-[425px] rounded-3xl pointer-events-auto z-[60]">
+        <DialogContent className={DIALOG_MODAL_STYLES}>
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center mb-2">Внимание</DialogTitle>
           </DialogHeader>

@@ -17,6 +17,7 @@ import { toCanvas } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import { ImageCropperDialog } from '../components/ImageCropperDialog';
 import { AboutApp } from '../components/AboutApp';
+import { DIALOG_MODAL_STYLES, DIALOG_FORM_STYLES } from '../constants';
 import * as XLSX from 'xlsx';
 
 function MediaViewer({ url, type }: { url: string, type: 'media' | 'audio' }) {
@@ -604,7 +605,7 @@ export default function ChildProfile() {
                 </div>
               )}
             </div>
-            <div className="text-lg sm:text-xl font-bold text-slate-800 break-words hyphens-auto flex flex-col gap-0.5 sm:gap-1" style={{ wordBreak: 'break-word' }}>
+            <div className="text-lg sm:text-xl font-bold text-slate-800 break-words hyphens-auto flex flex-col gap-0.5 sm:gap-1">
               {child.firstName && <span className="leading-none">{child.firstName}</span>}
               {child.lastName && <span className="leading-none">{child.lastName}</span>}
               {child.middleName && <span className="leading-none">{child.middleName}</span>}
@@ -638,7 +639,7 @@ export default function ChildProfile() {
                 >
                   <Plus className="h-5 w-5" />
                 </DialogTrigger>
-                <DialogContent className="max-w-[calc(100%-24px)] sm:max-w-[425px] rounded-[1.5rem] sm:rounded-[2rem] border-0 shadow-xl bg-white/95 backdrop-blur-md">
+                <DialogContent className={DIALOG_MODAL_STYLES}>
                   <DialogHeader>
                     <DialogTitle className="text-2xl font-bold text-center mb-2 text-slate-800">
                       {editingRecordId ? 'Редактирование записи' : 'Новая запись'}

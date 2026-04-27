@@ -5,6 +5,7 @@ import { Download, Upload, ShieldCheck, CheckCircle2, AlertCircle, Info, X } fro
 import { exportData, importData } from '../lib/db';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { motion, AnimatePresence } from 'motion/react';
+import { DIALOG_MODAL_STYLES, DIALOG_FORM_STYLES } from '../constants';
 
 export function BackupFooter() {
   const { refreshData, isAboutOpen, children, isModalOpen } = useStore();
@@ -104,7 +105,7 @@ export function BackupFooter() {
       </div>
 
       <Dialog open={showInfo} onOpenChange={setShowInfo}>
-        <DialogContent className="sm:max-w-[460px] max-h-[85vh] border-0 bg-white shadow-2xl rounded-[2.5rem] p-0 overflow-hidden pointer-events-auto flex flex-col z-[110]">
+        <DialogContent showCloseButton={false} className={DIALOG_FORM_STYLES}>
           <div className="bg-emerald-50/50 p-6 sm:p-8 pt-8 sm:pt-10 text-center relative shrink-0">
             <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 rounded-3xl bg-white shadow-sm flex items-center justify-center mb-4 sm:mb-6">
               <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8 text-emerald-500" strokeWidth={2.5} />
@@ -161,8 +162,8 @@ export function BackupFooter() {
       </Dialog>
 
       <Dialog open={!!alert} onOpenChange={() => setAlert(null)}>
-        <DialogContent className="sm:max-w-[400px] border-0 bg-white/95 backdrop-blur-xl shadow-2xl rounded-[2.5rem] p-0 overflow-hidden pointer-events-auto z-[110]">
-          <div className={`h-2 ${alert?.type === 'success' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+        <DialogContent className={DIALOG_MODAL_STYLES}>
+          <div className={`h-2 ${alert?.type === 'success' ? 'bg-emerald-500' : 'bg-rose-500'} rounded-t-[2rem]`} />
           <div className="p-8 pt-10 text-center">
             <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-6 ${alert?.type === 'success' ? 'bg-emerald-50' : 'bg-rose-50'}`}>
               {alert?.type === 'success' ? (
