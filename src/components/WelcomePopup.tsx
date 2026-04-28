@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Heart, X } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import confetti from 'canvas-confetti';
 

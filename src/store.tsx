@@ -65,7 +65,7 @@ export function StoreProvider({ children: reactChildren }: { children: ReactNode
       setChildren(loadedChildren);
       setRecords(loadedRecords);
     } catch (error) {
-      console.error("Failed to load data from local storage", error);
+      // Data failure
     }
   };
 
@@ -80,7 +80,7 @@ export function StoreProvider({ children: reactChildren }: { children: ReactNode
       await saveChildLocally(newChild);
       setChildren(prev => [...prev, newChild]);
     } catch (error) {
-      console.error("Failed to save child locally", error);
+      // Save failure
     }
   };
 
@@ -92,7 +92,7 @@ export function StoreProvider({ children: reactChildren }: { children: ReactNode
       await saveChildLocally(updatedChild);
       setChildren(prev => prev.map(c => c.id === id ? updatedChild : c));
     } catch (error) {
-      console.error("Failed to update child locally", error);
+      // Update failure
     }
   };
 
@@ -107,7 +107,7 @@ export function StoreProvider({ children: reactChildren }: { children: ReactNode
         await deleteRecord(record.id);
       }
     } catch (error) {
-      console.error("Failed to delete child locally", error);
+      // Delete failure
     }
   };
 
@@ -173,7 +173,7 @@ export function StoreProvider({ children: reactChildren }: { children: ReactNode
       await deleteRecordLocally(id);
       setRecords(prev => prev.filter(r => r.id !== id));
     } catch (error) {
-      console.error("Failed to delete record locally", error);
+      // Delete record failure
     }
   };
 

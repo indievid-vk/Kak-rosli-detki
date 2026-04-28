@@ -12,6 +12,7 @@ import { ImageCropperDialog } from '../components/ImageCropperDialog';
 import { AboutApp } from '../components/AboutApp';
 import { importData } from '../lib/db';
 import { DIALOG_FORM_STYLES, DIALOG_MODAL_STYLES } from '../constants';
+import { StatusDialog } from '../components/StatusDialog';
 
 export default function Home() {
   const { children, addChild, updateChild, deleteChild, setIsModalOpen, refreshData } = useStore();
@@ -78,7 +79,7 @@ export default function Home() {
     try {
       await importData(file);
       await refreshData();
-      setAlertMessage("Ура! Данные успешно восстановлены из резервной копии.");
+      setAlertMessage("Записи успешно восстановлены из резервной копии.");
     } catch(err) {
       setAlertMessage("Ошибка при восстановлении данных. Проверьте файл.");
     } finally {
@@ -150,7 +151,7 @@ export default function Home() {
                     ) : (
                       <>
                         <Upload className="w-5 h-5" />
-                        <span>Восстановить данные</span>
+                        <span>Восстановить записи</span>
                       </>
                     )}
                     <input 
@@ -289,7 +290,7 @@ export default function Home() {
       </div>
 
       <Dialog open={!!childToDelete} onOpenChange={(open) => !open && setChildToDelete(null)}>
-        <DialogContent className={DIALOG_MODAL_STYLES}>
+        <DialogContent showCloseButton={false} className={DIALOG_MODAL_STYLES}>
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center mb-2">Удаление</DialogTitle>
           </DialogHeader>
@@ -307,21 +308,12 @@ export default function Home() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={!!alertMessage} onOpenChange={(open) => !open && setAlertMessage(null)}>
-        <DialogContent className={DIALOG_MODAL_STYLES}>
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-center mb-2">Внимание</DialogTitle>
-          </DialogHeader>
-          <div className="text-center text-stone-600 mb-6">
-            {alertMessage}
-          </div>
-          <div className="flex justify-center">
-            <Button onClick={() => setAlertMessage(null)} className="rounded-xl h-12 px-8 font-bold bg-orange-500 hover:bg-orange-600 text-white shadow-sm">
-              ОК
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <StatusDialog 
+        isOpen={!!alertMessage} 
+        onClose={() => setAlertMessage(null)} 
+        message={alertMessage || ''} 
+        type={alertMessage?.includes('Ошибка') ? 'error' : 'success'}
+      />
     </div>
   );
 }

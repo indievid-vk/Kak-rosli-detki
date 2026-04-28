@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ArrowLeft, Shield, Heart, Download, Upload, Plus, Info } from 'lucide-react';
 import { exportData, importData } from '../lib/db';
+import { StatusDialog } from './StatusDialog';
 
 import { DIALOG_FORM_STYLES, DIALOG_MODAL_STYLES } from '../constants';
 
@@ -14,7 +15,7 @@ export function AboutApp({ className }: { className?: string }) {
   const handleExport = async () => {
     try {
       await exportData();
-      setAlertMessage("Резервная копия успешно создана и скачивается!");
+      setAlertMessage("Резервная копия успешно создана и скачивается");
     } catch(e) {
       setAlertMessage("Ошибка при создании резервной копии. Попробуйте еще раз.");
     }
@@ -27,7 +28,7 @@ export function AboutApp({ className }: { className?: string }) {
       await importData(file);
       await refreshData();
       setIsAboutOpen(false);
-      setAlertMessage("Ура! Данные успешно восстановлены!");
+      setAlertMessage("Записи успешно восстановлены");
     } catch(err) {
       setAlertMessage("Упс, ошибка при восстановлении данных. Возможно, не тот файл?");
     }
@@ -93,13 +94,13 @@ export function AboutApp({ className }: { className?: string }) {
                       <div className="flex flex-col gap-3">
                         <Button onClick={handleExport} className="w-full bg-emerald-100/50 hover:bg-emerald-100 text-emerald-800 font-bold h-14 rounded-2xl flex items-center justify-center gap-2 shadow-none border border-emerald-200/60 transition-colors">
                           <Download className="w-5 h-5 flex-shrink-0" />
-                          <span>Сохранить копию</span>
+                          <span>Сохранить записи</span>
                         </Button>
                         
                         <div className="relative">
                           <Button variant="outline" className="w-full border-stone-200 text-stone-700 hover:bg-stone-50 hover:text-stone-900 font-bold h-14 rounded-2xl flex items-center justify-center gap-2 relative overflow-hidden transition-colors">
                             <Upload className="w-5 h-5 flex-shrink-0" />
-                            <span>Восстановить из копии</span>
+                            <span>Восстановить записи</span>
                             <input 
                               type="file" 
                               accept=".json" 
@@ -136,21 +137,12 @@ export function AboutApp({ className }: { className?: string }) {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={!!alertMessage} onOpenChange={(open) => !open && setAlertMessage(null)}>
-        <DialogContent className={DIALOG_MODAL_STYLES}>
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-center mb-2">Внимание</DialogTitle>
-          </DialogHeader>
-          <div className="text-center text-stone-600 mb-6">
-            {alertMessage}
-          </div>
-          <div className="flex justify-center">
-            <Button onClick={() => setAlertMessage(null)} className="rounded-xl h-12 px-8 font-bold bg-orange-500 hover:bg-orange-600 text-white shadow-sm">
-              ОК
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <StatusDialog 
+        isOpen={!!alertMessage} 
+        onClose={() => setAlertMessage(null)} 
+        message={alertMessage || ''} 
+        type={alertMessage?.includes('Ошибка') ? 'error' : 'success'}
+      />
     </>
   );
 }

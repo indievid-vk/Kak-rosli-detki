@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useStore } from '../store';
 import { Button } from '@/components/ui/button';
-import { Download, Upload, ShieldCheck, CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
+import { Download, Upload, ShieldCheck, CheckCircle2, AlertCircle, Info } from 'lucide-react';
 import { exportData, importData } from '../lib/db';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { motion, AnimatePresence } from 'motion/react';
 import { DIALOG_MODAL_STYLES, DIALOG_FORM_STYLES } from '../constants';
+import { StatusDialog } from './StatusDialog';
 
 export function BackupFooter() {
   const { refreshData, isAboutOpen, children, isModalOpen } = useStore();
@@ -19,7 +20,7 @@ export function BackupFooter() {
     setIsProcessing(true);
     try {
       await exportData();
-      setAlert({ message: "Резервная копия успешно создана и скачивается!", type: 'success' });
+      setAlert({ message: "Резервная копия успешно создана и скачивается", type: 'success' });
     } catch(e) {
       setAlert({ message: "Ошибка при создании резервной копии. Попробуйте еще раз.", type: 'error' });
     } finally {
@@ -34,7 +35,7 @@ export function BackupFooter() {
     try {
       await importData(file);
       await refreshData();
-      setAlert({ message: "Ура! Все ваши моменты успешно восстановлены!", type: 'success' });
+      setAlert({ message: "Все ваши записи успешно восстановлены", type: 'success' });
     } catch(err) {
       setAlert({ message: "Упс, ошибка при восстановлении данных. Проверьте файл.", type: 'error' });
     } finally {
@@ -90,7 +91,7 @@ export function BackupFooter() {
                   className="w-full bg-stone-50/50 border-stone-200 text-stone-600 hover:bg-white hover:border-stone-300 rounded-full font-bold h-10 sm:h-11 px-2 sm:px-6 flex items-center justify-center gap-1.5 sm:gap-2 transition-all active:scale-95 text-[11px] sm:text-sm border-dashed"
                 >
                   <Upload className="w-3.5 h-3.5 sm:w-4 h-4" />
-                  <span className="truncate">Загрузить</span>
+                  <span className="truncate">Восстановить</span>
                   <input 
                     type="file" 
                     accept=".json" 
@@ -161,38 +162,12 @@ export function BackupFooter() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={!!alert} onOpenChange={() => setAlert(null)}>
-        <DialogContent className={DIALOG_MODAL_STYLES}>
-          <div className={`h-2 ${alert?.type === 'success' ? 'bg-emerald-500' : 'bg-rose-500'} rounded-t-[2rem]`} />
-          <div className="p-8 pt-10 text-center">
-            <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-6 ${alert?.type === 'success' ? 'bg-emerald-50' : 'bg-rose-50'}`}>
-              {alert?.type === 'success' ? (
-                <CheckCircle2 className="w-8 h-8 text-emerald-500" />
-              ) : (
-                <AlertCircle className="w-8 h-8 text-rose-500" />
-              )}
-            </div>
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-bold text-center mb-4 text-stone-800">
-                {alert?.type === 'success' ? 'Все готово!' : 'Ой, ошибка'}
-              </DialogTitle>
-            </DialogHeader>
-            <p className="text-stone-500 leading-relaxed font-medium px-4 mb-8">
-              {alert?.message}
-            </p>
-            <Button 
-              onClick={() => setAlert(null)} 
-              className={`w-full py-6 rounded-2xl font-bold transition-all shadow-lg text-lg ${
-                alert?.type === 'success' 
-                ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-100' 
-                : 'bg-rose-500 hover:bg-rose-600 shadow-rose-100'
-              } text-white`}
-            >
-              Принято
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <StatusDialog 
+        isOpen={!!alert} 
+        onClose={() => setAlert(null)} 
+        message={alert?.message || ''} 
+        type={alert?.type}
+      />
     </>
   );
 }

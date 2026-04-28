@@ -18,6 +18,7 @@ import { jsPDF } from 'jspdf';
 import { ImageCropperDialog } from '../components/ImageCropperDialog';
 import { AboutApp } from '../components/AboutApp';
 import { DIALOG_MODAL_STYLES, DIALOG_FORM_STYLES } from '../constants';
+import { StatusDialog } from '../components/StatusDialog';
 import * as XLSX from 'xlsx';
 
 function MediaViewer({ url, type }: { url: string, type: 'media' | 'audio' }) {
@@ -273,7 +274,6 @@ export default function ChildProfile() {
 
       pdf.save(`${child.firstName}_история.pdf`);
     } catch (error: any) {
-      console.error('Error generating PDF:', error);
       setAlertMessage(`Произошла ошибка при создании PDF: ${error.message || error}`);
     } finally {
       setIsGeneratingPdf(false);
@@ -430,7 +430,6 @@ export default function ChildProfile() {
         setIsEventOpen(false);
         setEditingRecordId(null);
       } catch (error) {
-        console.error("Failed to save record", error);
         setAlertMessage("Ошибка при сохранении. Возможно, файл слишком большой.");
       } finally {
         setIsSaving(false);
@@ -581,7 +580,6 @@ export default function ChildProfile() {
         await deleteRecord(recordToDelete);
         setRecordToDelete(null);
       } catch (error) {
-        console.error("Failed to delete record", error);
         setAlertMessage("Ошибка при удалении записи.");
       }
     }
@@ -1086,7 +1084,7 @@ export default function ChildProfile() {
       </Dialog>
 
       <Dialog open={!!recordToDelete} onOpenChange={(open) => !open && setRecordToDelete(null)}>
-        <DialogContent className="max-w-[calc(100%-24px)] sm:max-w-[425px] rounded-[1.5rem] sm:rounded-[2rem] border-0 shadow-xl bg-white/95 backdrop-blur-md">
+        <DialogContent showCloseButton={false} className="max-w-[calc(100%-24px)] sm:max-w-[425px] rounded-[1.5rem] sm:rounded-[2rem] border-0 shadow-xl bg-white/95 backdrop-blur-md">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center mb-2 text-slate-800">Удаление</DialogTitle>
           </DialogHeader>
@@ -1104,21 +1102,12 @@ export default function ChildProfile() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={!!alertMessage} onOpenChange={(open) => !open && setAlertMessage(null)}>
-        <DialogContent className="max-w-[calc(100%-24px)] sm:max-w-[425px] rounded-[1.5rem] sm:rounded-[2rem] border-0 shadow-xl bg-white/95 backdrop-blur-md">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-center mb-2 text-slate-800">Внимание</DialogTitle>
-          </DialogHeader>
-          <div className="text-center text-slate-600 mb-6">
-            {alertMessage}
-          </div>
-          <div className="flex justify-center">
-            <Button onClick={() => setAlertMessage(null)} className="rounded-full h-12 px-8 font-bold bg-orange-400 hover:bg-orange-500 text-white shadow-sm">
-              ОК
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <StatusDialog 
+        isOpen={!!alertMessage} 
+        onClose={() => setAlertMessage(null)} 
+        message={alertMessage || ''} 
+        type={alertMessage?.includes('ошибка') || alertMessage?.includes('Ошибка') ? 'error' : 'success'}
+      />
     </div>
   );
 }
