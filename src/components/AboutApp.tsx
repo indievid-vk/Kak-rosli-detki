@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useStore } from '../store';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ArrowLeft, Shield, Heart, Download, Upload, Plus, Info } from 'lucide-react';
+import { ArrowLeft, Shield, Heart, Download, Upload, Plus, Info, Mail } from 'lucide-react';
 import { exportData, importData } from '../lib/db';
 import { StatusDialog } from './StatusDialog';
 
@@ -123,7 +123,7 @@ export function AboutApp({ className }: { className?: string }) {
                      </p>
                  </div>
 
-                 <div className="pb-8">
+                 <div>
                     <div className="flex items-center gap-3 mb-3">
                        <Plus className="w-6 h-6 text-amber-500" strokeWidth={2.5} />
                        <h3 className="text-[19px] font-bold text-slate-900">Будущее ✨</h3>
@@ -132,6 +132,16 @@ export function AboutApp({ className }: { className?: string }) {
                        Если приложение будет вам полезно, в будущем мы можем добавить облачную синхронизацию. Тогда оба родителя смогут одновременно дополнять общую историю и видеть записи друг друга в реальном времени.
                      </p>
                  </div>
+
+                 <div className="pb-8">
+                    <div className="flex items-center gap-3 mb-3">
+                       <Mail className="w-6 h-6 text-indigo-500" strokeWidth={2.5} />
+                       <h3 className="text-[19px] font-bold text-slate-900">Обратная связь</h3>
+                     </div>
+                     <p className="text-stone-600 leading-relaxed text-[15px]">
+                       Будем рады вашим пожеланиям и предложениям! Пишите нам на почту: <a href="mailto:kak.rosli.detki@mail.ru" className="text-indigo-600 font-bold hover:underline">kak.rosli.detki@mail.ru</a>
+                     </p>
+                  </div>
             </div>
           </div>
         </DialogContent>
