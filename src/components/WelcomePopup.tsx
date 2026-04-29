@@ -11,9 +11,12 @@ export function WelcomePopup() {
   useEffect(() => {
     const hasSeenWelcome = localStorage.getItem('welcome_seen');
     const justUpdated = localStorage.getItem('pwa_just_updated');
+    
+    console.log('[WelcomePopup] Checking state:', { hasSeenWelcome, justUpdated });
 
     // Handle post-update message
     if (justUpdated) {
+      console.log('[WelcomePopup] Update detected! Showing fireworks.');
       setMode('updated');
       setIsOpen(true);
       localStorage.removeItem('pwa_just_updated');

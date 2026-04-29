@@ -34,13 +34,15 @@ if ('serviceWorker' in navigator) {
             });
     });
 
-    // Handle controller change (reload after skipWaiting)
+            // Handle controller change (reload after skipWaiting)
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
+        console.log('[PWA] Controller changed! New version is taking over.');
         if (!refreshing) {
             refreshing = true;
             // Set flag so we know we just updated after reload
             localStorage.setItem('pwa_just_updated', 'true');
+            console.log('[PWA] Refreshing page to apply update...');
             window.location.reload();
         }
     });

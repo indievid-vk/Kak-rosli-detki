@@ -1,4 +1,6 @@
-const CACHE_NAME = 'pwa-diary-v115';
+const CACHE_NAME = 'pwa-diary-v121';
+
+/* Version 121 - Updated Feedback Block & UI Fixes */
 
 const urlsToCache = [
   './',
