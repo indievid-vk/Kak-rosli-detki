@@ -89,15 +89,29 @@ export const exportData = async () => {
   const children = await db.getAll('children');
   const records = await db.getAll('records');
   
+  // Start building the JSON manually to avoid large string allocation
+  const chunks: any[] = [];
+  chunks.push('{"children":');
+  chunks.push(JSON.stringify(children));
+  chunks.push(',"records":');
+  chunks.push(JSON.stringify(records));
+  chunks.push(',"media":[');
+
   const tx = db.transaction('media', 'readonly');
   const mediaStore = tx.objectStore('media');
-  const mediaKeys = await mediaStore.getAllKeys();
-  const media = await Promise.all(mediaKeys.map(async key => {
-    return { key, value: await mediaStore.get(key) };
-  }));
+  let cursor = await mediaStore.openCursor();
+  
+  let first = true;
+  while (cursor) {
+    if (!first) chunks.push(',');
+    chunks.push(JSON.stringify({ key: cursor.key, value: cursor.value }));
+    first = false;
+    cursor = await cursor.continue();
+  }
 
-  const data = { children, records, media };
-  const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+  chunks.push(']}');
+
+  const blob = new Blob(chunks, { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -113,12 +127,20 @@ export const importData = async (file: File): Promise<void> => {
     const reader = new FileReader();
     reader.onload = async (e) => {
       try {
-        const data = JSON.parse(e.target?.result as string);
+        const text = e.target?.result as string;
+        // Check if text is extremely large (e.g., > 300MB)
+        if (text.length > 300 * 1024 * 1024) {
+          console.warn('Very large backup file detected. Import might be slow or unstable.');
+        }
+
+        const data = JSON.parse(text);
         if (!data || !Array.isArray(data.children) || !Array.isArray(data.records) || !Array.isArray(data.media)) {
           throw new Error('Invalid file format');
         }
         
         const db = await initDB();
+        
+        // Use separate transactions if needed to avoid long-running locks
         const tx = db.transaction(['children', 'records', 'media'], 'readwrite');
         
         for (const child of data.children) {
