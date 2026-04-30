@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useStore } from '../store';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -11,6 +11,13 @@ import { DIALOG_FORM_STYLES, DIALOG_MODAL_STYLES } from '../constants';
 export function AboutApp({ className }: { className?: string }) {
   const { refreshData, isAboutOpen, setIsAboutOpen } = useStore();
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isAboutOpen && scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [isAboutOpen]);
 
   const handleExport = async () => {
     try {
@@ -55,7 +62,8 @@ export function AboutApp({ className }: { className?: string }) {
              <h2 className="text-xl font-semibold text-stone-800">О приложении</h2>
           </div>
           
-          <div className="flex-1 overflow-y-auto bg-stone-50 flex flex-col">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto bg-stone-50 flex flex-col">
+            <div tabIndex={0} className="w-0 h-0 outline-none focus:outline-none" autoFocus />
             <div className="p-6 bg-white flex-1 flex flex-col space-y-8">
                  <div>
                     <div className="flex items-center gap-3 mb-3">
@@ -77,8 +85,11 @@ export function AboutApp({ className }: { className?: string }) {
                      <p className="text-stone-600 leading-relaxed text-[15px] mb-3">
                        Приложение работает как PWA (Progressive Web App) — современная технология, которая позволяет устанавливать приложение не из магазина приложений, а просто по прямой ссылке. Оно живет прямо в вашем браузере, почти не занимая лишнего места.
                      </p>
-                     <p className="text-stone-600 leading-relaxed text-[15px]">
+                     <p className="text-stone-600 leading-relaxed text-[15px] mb-3">
                        Все записи и фото хранятся <span className="font-bold text-slate-800">только внутри памяти браузера</span>. Это обеспечивает полную приватность, но есть нюанс: если вы очистите кэш или данные браузера, воспоминания могут исчезнуть навсегда. Поэтому мы создали инструмент безопасности...
+                     </p>
+                     <p className="text-red-600/90 bg-red-50 p-3 rounded-xl border border-red-100 leading-relaxed text-[14px]">
+                       <span className="font-bold">⚠️ Ограничение на размер файлов:</span> Так как память браузера ограничена, рекомендуем прикреплять медиафайлы <b>размером до 50 Мб</b> каждый. Добавление очень больших файлов (например, длинных видео более 100 Мб) может привести к переполнению памяти и падению/перезагрузке браузера.
                      </p>
                  </div>
 

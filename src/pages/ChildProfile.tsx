@@ -547,6 +547,11 @@ export default function ChildProfile() {
   const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'audio' | 'video') => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 50 * 1024 * 1024) {
+        setAlertMessage("Файл слишком велик. Выберите файл размером до 50 Мб, чтобы избежать сбоев браузера.");
+        e.target.value = '';
+        return;
+      }
       const reader = new FileReader();
       reader.onloadend = () => {
         if (type === 'audio') {

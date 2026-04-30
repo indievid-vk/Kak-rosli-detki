@@ -333,6 +333,11 @@ function ChildForm({ initialData, onSave, onCancel }: { initialData?: Child, onS
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 50 * 1024 * 1024) {
+        alert("Файл слишком велик. Выберите фото размером до 50 Мб.");
+        e.target.value = '';
+        return;
+      }
       const reader = new FileReader();
       reader.onloadend = () => {
         setCropImageSrc(reader.result as string);

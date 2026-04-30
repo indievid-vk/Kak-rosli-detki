@@ -1,9 +1,9 @@
-const CACHE_NAME = 'pwa-diary-v122';
+const CACHE_NAME = 'pwa-diary-v123';
 
-/* Version 122 - Improved Stability and Cache Logic */
+/* Version 123 - Fixed Relative Paths for Subfolder Support */
 
 const urlsToCache = [
-  '/',
+  './',
   'index.html',
   'manifest.json',
   'pwa-setup.js'
@@ -64,7 +64,7 @@ self.addEventListener('fetch', event => {
     if (event.request.mode === 'navigate') {
         event.respondWith(
             fetch(event.request).catch(() => {
-                return caches.match('/') || caches.match('index.html');
+                return caches.match('./') || caches.match('index.html');
             })
         );
         return;

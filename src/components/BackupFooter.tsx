@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useStore } from '../store';
 import { Button } from '@/components/ui/button';
 import { Download, Upload, ShieldCheck, CheckCircle2, AlertCircle, Info } from 'lucide-react';
@@ -13,6 +13,17 @@ export function BackupFooter() {
   const [alert, setAlert] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (showInfo && scrollRef.current) {
+      setTimeout(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = 0;
+        }
+      }, 10);
+    }
+  }, [showInfo]);
 
   if (isAboutOpen || isModalOpen || children.length === 0) return null;
 
@@ -117,7 +128,8 @@ export function BackupFooter() {
               </DialogTitle>
             </DialogHeader>
           </div>
-          <div className="px-6 sm:px-8 pb-8 overflow-y-auto custom-scrollbar">
+          <div ref={scrollRef} className="px-6 sm:px-8 pb-8 overflow-y-auto custom-scrollbar h-full max-h-[60vh]">
+            <div tabIndex={0} className="w-0 h-0 outline-none focus:outline-none" autoFocus />
             <div className="space-y-4 sm:space-y-6">
               <div className="space-y-3 sm:space-y-4 text-stone-600 text-sm sm:text-[15px] leading-relaxed">
                 <p>
@@ -125,6 +137,9 @@ export function BackupFooter() {
                 </p>
                 <p>
                   Все записи и фото хранятся <span className="font-bold text-slate-800">только внутри памяти браузера</span>. Это обеспечивает полную приватность, но есть нюанс: если вы очистите кэш или данные браузера, воспоминания могут исчезнуть навсегда. Поэтому мы создали инструмент безопасности — <span className="font-bold text-emerald-600">Резервное копирование данных</span>.
+                </p>
+                <p className="text-red-600/90 bg-red-50 p-3 rounded-xl border border-red-100 leading-relaxed text-[14px]">
+                  <span className="font-bold">⚠️ Ограничение на размер файлов:</span> Так как память браузера ограничена, рекомендуем прикреплять медиафайлы <b>размером до 50 Мб</b> каждый. Добавление очень больших файлов (например, длинных видео на 100+ Мб) приводит к перегрузке памяти и падению/перезагрузке браузера при создании резервной копии.
                 </p>
                 <p>
                   Регулярно скачивайте файл дневничка, чтобы обезопасить себя. Эту копию можно передавать между устройствами или даже пересылать друг другу через мессенджеры, чтобы восстановить историю на другом телефоне.
