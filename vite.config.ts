@@ -6,7 +6,8 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
-    base: mode === 'production' ? '/Kak-rosli-detki/' : '/', // Use hyphen to match GitHub Pages repo name
+    // Using relative base './' makes the app portable (works at root or in subfolders like GitHub Pages)
+    base: mode === 'production' ? './' : '/', 
     plugins: [
       react(), 
       tailwindcss()
